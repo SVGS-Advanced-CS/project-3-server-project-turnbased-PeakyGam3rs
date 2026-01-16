@@ -1,0 +1,6 @@
+the 200k questions is sourced from https://www.kaggle.com/datasets/aravindram11/jeopardy-dataset-updated
+if the dataset is ever updated, just replace the json manually and run JPRDYCTRL.loadDb
+the corresponding database is JPRDY.db
+
+the stash.db database sources from https://opentdb.com/
+to update it, run YoinkyDoodle and then StashCTRL.loadDB
