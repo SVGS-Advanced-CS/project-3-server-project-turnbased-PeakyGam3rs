@@ -1,11 +1,13 @@
 package com.svgs;
 
-import static spark.Spark.*;
+import static spark.Spark.before;
+import static spark.Spark.options;
 
 public class Main {
 
     public static void main(String[] args) {
-        disableCORS();
+        //disableCORS();
+        com.svgs.model.Category[] cats = com.svgs.api.JAPI.getGame();
 
         
 
