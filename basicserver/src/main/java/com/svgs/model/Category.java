@@ -18,6 +18,13 @@ public class Category {
         return questions[index];
     }
 
+    public void print() {
+        System.out.println(title);
+        for (Question q : questions) {
+            q.print();
+        }
+    }
+
     @Override
     public int hashCode() {
         Set<Question> set = Set.of(questions);

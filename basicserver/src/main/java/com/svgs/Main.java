@@ -1,5 +1,7 @@
 package com.svgs;
 
+import com.svgs.model.Category;
+
 import static spark.Spark.before;
 import static spark.Spark.options;
 
@@ -7,8 +9,10 @@ public class Main {
 
     public static void main(String[] args) {
         //disableCORS();
-        com.svgs.model.Category[] cats = com.svgs.api.JAPI.getGame();
-
+        Category[] cats = com.svgs.api.JAPI.getGame();
+        for (Category cat : cats) {
+            cat.print();
+        }
         
 
     }
