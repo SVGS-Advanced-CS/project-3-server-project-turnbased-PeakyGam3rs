@@ -1,6 +1,7 @@
 package com.svgs;
 
 import com.svgs.model.Category;
+import com.svgs.server.Names;
 
 import static spark.Spark.before;
 import static spark.Spark.options;
@@ -13,6 +14,7 @@ public class Main {
         for (Category cat : cats) {
             cat.print();
         }
+        Names.loadNames();
         
 
     }

@@ -21,7 +21,7 @@ public class JDBReader {
     private Connection conn;
 
     public JDBReader() {
-        String url = "jdbc:sqlite:./basicserver/src/main/resources/JPRDY.db";
+        String url = "jdbc:sqlite:./src/main/resources/JPRDY.db";
         try {
             conn = DriverManager.getConnection(url);
             conn.createStatement().execute("PRAGMA foreign_keys = ON");
