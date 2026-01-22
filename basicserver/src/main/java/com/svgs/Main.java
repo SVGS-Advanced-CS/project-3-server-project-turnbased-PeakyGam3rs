@@ -1,6 +1,8 @@
 package com.svgs;
 
+import com.google.gson.Gson;
 import com.svgs.model.Category;
+import com.svgs.server.Helper;
 import com.svgs.server.Names;
 
 import static spark.Spark.before;
@@ -9,12 +11,9 @@ import static spark.Spark.options;
 public class Main {
 
     public static void main(String[] args) {
-        //disableCORS();
-        Category[] cats = com.svgs.api.JAPI.getGame();
-        for (Category cat : cats) {
-            cat.print();
-        }
-        Names.loadNames();
+        Gson gson = new Gson();
+        port(4567);
+        get("api/initialize_user", "application/json", (req, res) -> gson.toJson(Manager.createUser()));
         
 
     }
