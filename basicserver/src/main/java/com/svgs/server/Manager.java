@@ -28,7 +28,7 @@ public class Manager {
         Usr tmp = gson.fromJson(inputJson, Usr.class);
         if (uidExists(tmp.uid)) {
             if (isUserInGame(tmp.uid))
-                return "{gid=\"uid is already in a game\"";
+                return "{gid=\"uid is already in a game\"}";
             Match game = new Match(tmp.uid, findName(tmp.uid), Helper.initializeGame(), newGid(""));
             return game.getGid();
         }
