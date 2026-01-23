@@ -13,9 +13,9 @@ public class Main {
     public static void main(String[] args) {
         Gson gson = new Gson();
         port(4567);
+        before((req, res) -> res.type("application/json"));
         get("api/initialize_user", "application/json", (req, res) -> gson.toJson(Manager.createUser()));
-        
-
+        post("api/create_game", "application/json", (req, res) -> Manager.createGame(req));        
     }
 
     public static void disableCORS() {

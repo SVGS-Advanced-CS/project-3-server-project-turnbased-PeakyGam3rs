@@ -19,6 +19,10 @@ public class User {
         return name;
     }
 
+    public void print() {
+        System.out.printf("[USER_DEBUG] uid: %s\tname: %s", uid, name);
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(uid, name);
