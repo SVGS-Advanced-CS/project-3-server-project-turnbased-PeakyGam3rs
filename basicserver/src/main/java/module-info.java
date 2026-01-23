@@ -14,6 +14,7 @@ module com.svgs
 
     opens com.svgs to javafx.fxml, com.google.gson;
     opens com.svgs.dtos to com.google.gson;
+    opens com.svgs.game_model to com.google.gson;
 
     exports com.svgs;
 }

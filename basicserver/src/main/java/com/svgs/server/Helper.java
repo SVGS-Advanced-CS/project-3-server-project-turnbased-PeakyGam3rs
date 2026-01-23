@@ -1,5 +1,5 @@
 package com.svgs.server;
-
+// big ugly class, no logic here
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;

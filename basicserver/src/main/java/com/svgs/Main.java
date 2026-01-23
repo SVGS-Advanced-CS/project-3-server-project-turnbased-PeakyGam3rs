@@ -1,12 +1,12 @@
 package com.svgs;
 
 import com.google.gson.Gson;
-import com.svgs.model.Category;
-import com.svgs.server.Helper;
-import com.svgs.server.Names;
+import com.svgs.server.Manager;
 
 import static spark.Spark.before;
+import static spark.Spark.get;
 import static spark.Spark.options;
+import static spark.Spark.port;
 
 public class Main {
 
