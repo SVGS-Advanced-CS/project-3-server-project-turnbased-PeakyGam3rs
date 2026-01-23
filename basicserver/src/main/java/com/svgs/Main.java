@@ -7,6 +7,7 @@ import static spark.Spark.before;
 import static spark.Spark.get;
 import static spark.Spark.options;
 import static spark.Spark.port;
+import static spark.Spark.post;
 
 public class Main {
 
@@ -15,7 +16,10 @@ public class Main {
         port(4567);
         before((req, res) -> res.type("application/json"));
         get("api/initialize_user", "application/json", (req, res) -> gson.toJson(Manager.createUser()));
-        post("api/create_game", "application/json", (req, res) -> Manager.createGame(req));        
+        //post("api/create_game", "application/json", (req, res) -> Manager.createGame(req.body())); 
+        post("api/create_game", "application/json", (req, res) -> {
+            return Manager.createGame(req.body());
+        });       
     }
 
     public static void disableCORS() {
