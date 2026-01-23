@@ -30,6 +30,7 @@ public class Manager {
             if (isUserInGame(tmp.uid))
                 return "{gid=\"uid is already in a game\"}";
             Match game = new Match(tmp.uid, findName(tmp.uid), Helper.initializeGame(), newGid(""));
+            games.add(game);
             return game.getGid();
         }
         return "";
