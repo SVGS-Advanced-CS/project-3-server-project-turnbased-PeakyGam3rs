@@ -1,4 +1,6 @@
-package com.svgs.model;
+package com.svgs.game_model;
+
+import com.svgs.model.Category;
 
 public class Match {
     private Player p1;

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import com.google.gson.Gson;
 import com.svgs.dtos.Usr;
+import com.svgs.game_model.Match;
 import com.svgs.game_model.User;
-import com.svgs.model.Match;
 
 public class Manager {
     private static final ArrayList<User> users = new ArrayList<>();
@@ -26,16 +26,22 @@ public class Manager {
 
     public static String createGame(String inputJson) {
         Usr tmp = gson.fromJson(inputJson, Usr.class);
-        if (uidExists(tmp.uid)) {
-            if (isUserInGame(tmp.uid))
-                return "{gid=\"uid is already in a game\"}";
-            Match game = new Match(tmp.uid, findName(tmp.uid), Helper.initializeGame(), newGid(""));
-            games.add(game);
-            return game.getGid();
+        if (!uidExists(tmp.uid)) {
+            return(Helper.errorMessage("uid doesn't exist"));
         }
-        return "";
+        if (isUserInGame(tmp.uid)) {
+            return Helper.errorMessage("User is already in a game.");
+        }
+        Match game = new Match(tmp.uid, findName(tmp.uid), Helper.initializeGame(), newGid(""));
+        games.add(game);
+        return gidResult(game.getGid());
     }
 
+    static String gidResult(String gid) {
+        record res(String gid) {}
+        return gson.toJson(new res(gid), res.class);
+    }
+ 
     public static boolean isUserInGame(String uid) {
         for (Match g : games)
             if (g.isPlaying(uid))
@@ -44,10 +50,12 @@ public class Manager {
     }
 
     public static String newGid(String s) {
-        if (s.length() != 4)
+        if (s.length() != 4) {
             return newGid(Helper.generateId(4));
-        if (gidExists(s))
+        }
+        if (gidExists(s)) {
             return newGid(Helper.generateId(4));
+        }
         return s;
     }
 
@@ -66,9 +74,11 @@ public class Manager {
     }
 
     public static boolean gidExists(String gid) {
-        for (Match g : games)
-            if (g.getGid().equals(gid))
+        for (Match g : games) {
+            if (g.getGid().equals(gid)) {
                 return true;
+            }
+        }
         return false;
     }
 

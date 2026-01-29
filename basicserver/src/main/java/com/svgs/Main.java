@@ -1,6 +1,7 @@
 package com.svgs;
 
 import com.google.gson.Gson;
+import com.svgs.game_model.User;
 import com.svgs.server.Manager;
 
 import static spark.Spark.before;
@@ -18,8 +19,11 @@ public class Main {
         get("api/initialize_user", "application/json", (req, res) -> gson.toJson(Manager.createUser()));
         //post("api/create_game", "application/json", (req, res) -> Manager.createGame(req.body())); 
         post("api/create_game", "application/json", (req, res) -> {
-            return Manager.createGame(req.body());
-        });       
+            return "msg: " + req.body();
+        });
+        User user = Manager.createUser();
+        System.out.println(Manager.createGame(gson.toJson(user, User.class)));
+
     }
 
     public static void disableCORS() {

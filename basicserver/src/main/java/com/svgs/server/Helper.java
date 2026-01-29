@@ -12,12 +12,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.google.gson.Gson;
 import com.svgs.model.Category;
 import com.svgs.model.Question;
 
 public class Helper {
     private static final String charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private static final Connection jpconn = createConnection("JPRDY.db");
+    private static final Gson gson = new Gson();
+
+    static String errorMessage(String error) {
+        record em(String error) {}
+        return gson.toJson(new em(error), em.class);
+    }
 
     static String generateId(int length) {
         String result = "";
