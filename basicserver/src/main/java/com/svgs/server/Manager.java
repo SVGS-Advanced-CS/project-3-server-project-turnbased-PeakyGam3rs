@@ -26,6 +26,7 @@ public class Manager {
 
     public static String createGame(String inputJson) {
         Usr tmp = gson.fromJson(inputJson, Usr.class);
+        System.out.println("parsed uid: " + tmp.uid);
         if (!uidExists(tmp.uid)) {
             return(Helper.errorMessage("uid doesn't exist"));
         }

@@ -19,7 +19,12 @@ public class Main {
         get("api/initialize_user", "application/json", (req, res) -> gson.toJson(Manager.createUser()));
         //post("api/create_game", "application/json", (req, res) -> Manager.createGame(req.body())); 
         post("api/create_game", "application/json", (req, res) -> {
-            return "msg: " + req.body();
+            res.type("application/json");
+            System.out.println(req.body());
+            String gid = Manager.createGame(req.body());
+            System.out.println(gid);
+            record gam(String gid){}
+            return gson.toJson(new gam(gid), gam.class);
         });
         User user = Manager.createUser();
         System.out.println(Manager.createGame(gson.toJson(user, User.class)));
