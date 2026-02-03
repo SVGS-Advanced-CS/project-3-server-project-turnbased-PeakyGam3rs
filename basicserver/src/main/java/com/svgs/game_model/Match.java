@@ -9,7 +9,7 @@ public class Match {
     private record Player(String uid, String name) {};
 
     public Match(String uidp1, String namep1, Category[] cats, String gid) {
-
+        this.gid = gid;
     } 
     public String getGid() {
         return gid;

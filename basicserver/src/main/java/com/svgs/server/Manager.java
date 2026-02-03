@@ -33,9 +33,11 @@ public class Manager {
         if (isUserInGame(tmp.uid)) {
             return Helper.errorMessage("User is already in a game.");
         }
+        System.out.println("made it past the tests");
         Match game = new Match(tmp.uid, findName(tmp.uid), Helper.initializeGame(), newGid(""));
         games.add(game);
-        return gidResult(game.getGid());
+        System.out.println(game.getGid());
+        return game.getGid();
     }
 
     static String gidResult(String gid) {
@@ -84,9 +86,11 @@ public class Manager {
     }
 
     public static boolean uidExists(String uid) {
-        for (User u : users)
-            if (u.getUid().equals(uid))
+        for (User u : users) {
+            if (u.getUid().equals(uid)) {
                 return true;
+            }
+        }
         return false;
     }
 

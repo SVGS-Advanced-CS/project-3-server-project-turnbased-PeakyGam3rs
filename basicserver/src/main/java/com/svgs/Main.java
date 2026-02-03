@@ -20,9 +20,9 @@ public class Main {
         //post("api/create_game", "application/json", (req, res) -> Manager.createGame(req.body())); 
         post("api/create_game", "application/json", (req, res) -> {
             res.type("application/json");
-            System.out.println(req.body());
-            String gid = Manager.createGame(req.body());
-            System.out.println(gid);
+            String body = req.body();
+            String gid = Manager.createGame(body);
+            System.out.println(" gid: " + gid);
             record gam(String gid){}
             return gson.toJson(new gam(gid), gam.class);
         });
