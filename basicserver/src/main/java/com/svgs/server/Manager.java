@@ -24,22 +24,66 @@ public class Manager {
         return result;
     }
 
+    public static String joinGame(String uid, String gid) {
+        record Success(String success){};
+        record Error(String success, String error) {};
+        User u;
+        try {
+            u = fetchUser(uid);
+        } catch (Exception e) {
+            return gson.toJson(new Error("false", e.getMessage()), Error.class);
+        }
+        if (isUserInGame(u.getUid())) {
+            return gson.toJson(new Error("false", "user is already in a game"), Error.class);
+        }
+        Match g;
+        try {
+            g = fetchGame(gid);
+        } catch (Exception e) {
+            return gson.toJson(new Error("false", e.getMessage()), Error.class);
+        }
+        if (g.hasPlayerTwo()) {
+            return gson.toJson(new Error("false", String.format("game with id %s is full.", gid)), Error.class);
+        }
+
+    }
+
+    public static Match fetchGame(String gid) throws Exception {
+        for (Match g : games) {
+            if (g.getGid().equals(gid)) {
+                return g;
+            }
+        }
+        throw new Exception(String.format("gid %s does not exist", gid));
+    }
+    
     public static String createGame(String inputJson) {
         Usr tmp = gson.fromJson(inputJson, Usr.class);
         System.out.println("parsed uid: " + tmp.uid);
-        if (!uidExists(tmp.uid)) {
-            return(Helper.errorMessage("uid doesn't exist"));
+        User u;
+        try {
+            u = fetchUser(tmp.uid);
+        } catch (Exception e) {
+            return (Helper.errorMessage("uid doesn't exist"));
         }
         if (isUserInGame(tmp.uid)) {
             return Helper.errorMessage("User is already in a game.");
         }
         System.out.println("made it past the tests");
-        Match game = new Match(tmp.uid, findName(tmp.uid), Helper.initializeGame(), newGid(""));
+        Match game = Helper.newMatch(u, newGid(""));
         games.add(game);
         System.out.println(game.getGid());
         return game.getGid();
     }
 
+    static User fetchUser(String uid) throws Exception {
+        for (User u : users) {
+            if (u.getUid().equals(uid)) {
+                return u;
+            }
+        }
+        throw new Exception(String.format("user with uid %s does not exist", uid));
+    }
     static String gidResult(String gid) {
         record res(String gid) {}
         return gson.toJson(new res(gid), res.class);

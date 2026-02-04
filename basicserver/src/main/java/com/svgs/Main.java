@@ -26,6 +26,13 @@ public class Main {
             record gam(String gid){}
             return gson.toJson(new gam(gid), gam.class);
         });
+        post("/api/join_game", "application/json", (req,res) -> {
+            record Tmp(String uid, String gid) {};
+            Tmp tmp = gson.fromJson(req.body(), Tmp.class);
+            return Manager.joinGame(uid, gid);
+        });
+
+
         User user = Manager.createUser();
         System.out.println(Manager.createGame(gson.toJson(user, User.class)));
 

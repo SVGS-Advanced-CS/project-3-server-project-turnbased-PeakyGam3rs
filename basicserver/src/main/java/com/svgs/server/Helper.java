@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.google.gson.Gson;
+import com.svgs.game_model.Match;
+import com.svgs.game_model.User;
 import com.svgs.model.Category;
 import com.svgs.model.Question;
 
@@ -21,6 +23,12 @@ public class Helper {
     private static final Connection jpconn = createConnection("JPRDY.db");
     private static final Gson gson = new Gson();
 
+
+    static Match newMatch(User one, String gid) {
+        Category[] cats = genCats();
+        Match result = new Match(one, cats, gid);
+        return result;
+    }
     static String errorMessage(String error) {
         record em(String error) {}
         return gson.toJson(new em(error), em.class);
@@ -47,7 +55,7 @@ public class Helper {
         return conn;
     }
 
-    static Category[] initializeGame() {
+    static Category[] genCats() {
         String query = "SELECT c.* FROM categories c "
                 + "JOIN questions q ON q.category_id = c.category_id "
                 + "GROUP BY c.category_id "

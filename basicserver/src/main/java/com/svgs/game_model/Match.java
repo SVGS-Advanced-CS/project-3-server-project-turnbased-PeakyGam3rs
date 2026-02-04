@@ -3,18 +3,25 @@ package com.svgs.game_model;
 import com.svgs.model.Category;
 
 public class Match {
-    private Player p1;
-    private Player p2;
     private String gid;
-    private record Player(String uid, String name) {};
+    private User p1;
+    private User p2;
 
-    public Match(String uidp1, String namep1, Category[] cats, String gid) {
+    public Match(User one, Category[] cats, String gid) {
+        this.p1 = one;
         this.gid = gid;
-    } 
+    }
+    public boolean hasPlayerTwo() {
+        return p2 == null;
+    }
+    public void setPlayerTwo(User u) {
+        p2 = u;
+    }
     public String getGid() {
         return gid;
     }
     public boolean isPlaying(String uid) {
-        return p1.uid.equals(uid)||p2.uid.equals(uid);
+        if (p2 == null) return p1.getUid().equals(uid);
+        return p1.getUid().equals(uid)||p2.getUid().equals(uid);
     }
 }
