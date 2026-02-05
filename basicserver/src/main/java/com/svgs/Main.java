@@ -29,7 +29,7 @@ public class Main {
         post("/api/join_game", "application/json", (req,res) -> {
             record Tmp(String uid, String gid) {};
             Tmp tmp = gson.fromJson(req.body(), Tmp.class);
-            return Manager.joinGame(uid, gid);
+            return Manager.joinGame(tmp.uid, tmp.gid);
         });
 
 
