@@ -24,9 +24,19 @@ public class Manager {
         return result;
     }
 
-    public static String joinGame(String uid, String gid) {
+    public static String joinGame(String input) {
+        record Tmp(String uid, String gid){};
+        Tmp tmp;
         record Success(String success){};
         record Error(String success, String error) {};
+        try {
+            tmp = gson.fromJson(input, Tmp.class);
+        } catch (Exception e) {
+            return gson.toJson(new Error("false",e.getMessage()), Error.class);
+        }
+        String uid = tmp.uid;
+        String gid = tmp.gid;
+        
         User u;
         try {
             u = fetchUser(uid);

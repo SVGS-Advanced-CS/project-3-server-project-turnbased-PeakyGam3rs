@@ -12,7 +12,7 @@ public class Match {
         this.gid = gid;
     }
     public boolean hasPlayerTwo() {
-        return p2 == null;
+        return p2 != null;
     }
     public void setPlayerTwo(User u) {
         p2 = u;

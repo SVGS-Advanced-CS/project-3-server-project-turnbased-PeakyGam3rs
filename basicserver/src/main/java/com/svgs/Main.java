@@ -22,14 +22,12 @@ public class Main {
             res.type("application/json");
             String body = req.body();
             String gid = Manager.createGame(body);
-            System.out.println(" gid: " + gid);
             record gam(String gid){}
             return gson.toJson(new gam(gid), gam.class);
         });
         post("/api/join_game", "application/json", (req,res) -> {
-            record Tmp(String uid, String gid) {};
-            Tmp tmp = gson.fromJson(req.body(), Tmp.class);
-            return Manager.joinGame(tmp.uid, tmp.gid);
+            res.type("application/json");
+            return Manager.joinGame(req.body());
         });
 
 
