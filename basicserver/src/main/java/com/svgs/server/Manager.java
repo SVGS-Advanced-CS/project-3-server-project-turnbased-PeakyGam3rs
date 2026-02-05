@@ -45,7 +45,8 @@ public class Manager {
         if (g.hasPlayerTwo()) {
             return gson.toJson(new Error("false", String.format("game with id %s is full.", gid)), Error.class);
         }
-
+        g.setPlayerTwo(u);
+        return gson.toJson(new Success(String.format("user with uid %s added to game %s",u.getUid(), g.getGid())), Success.class);
     }
 
     public static Match fetchGame(String gid) throws Exception {
