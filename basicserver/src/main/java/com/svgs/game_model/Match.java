@@ -50,7 +50,7 @@ public class Match {
         info.player_2_pts = 0;
         info.player_1_name = p1.getName();
         info.current_stage = "waiting";
-        info.logGenericEvent(String.format("%s created game %s", p1.getName(), p1.getName()));
+        info.logGenericEvent(String.format("%s created game %s", p1.getName(), gid));
     }
     
     public boolean hasPlayerTwo() {
