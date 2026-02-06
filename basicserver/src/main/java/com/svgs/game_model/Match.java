@@ -41,7 +41,16 @@ public class Match {
             String title = source.getTitle();
             kittens[i] = new GameCategory(title, i, qs);
         }
+
+        // data is parsed, now prepare GameInfo
         info = new GameInfo(this, kittens);
+        info.game_over = "false";
+        info.player_1_pts = 0;
+        info.player_2_pts = 0;
+        info.player_1_name = p1.getName();
+        info.current_stage = "waiting";
+        info.active_player = ((int)(Math.random())==1?p1.getName():p2.getName());
+        
     }
     
     public boolean hasPlayerTwo() {
@@ -49,6 +58,8 @@ public class Match {
     }
     public void setPlayerTwo(User u) {
         p2 = u;
+        info.player_2_name = p2.getName();
+        info.player_2_pts = 0;
     }
     public String getGid() {
         return gid;
@@ -59,7 +70,7 @@ public class Match {
     }
 
     public GameInfo getGameInfo() {
-        return info.report(); // simple check for censorship
+        return info.report(); // available data logic handled in GameInfo
     }
 
     private boolean pointsAscending(GameQuestion[] qs) {

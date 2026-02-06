@@ -10,6 +10,5 @@ public class GameQuestion {
         this.question_index = question_index;
         this.point_value = point_value;
         this.is_answered = is_answered;
-        this.question_text = question_text;
     }
 }
