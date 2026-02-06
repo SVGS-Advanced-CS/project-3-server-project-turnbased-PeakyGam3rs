@@ -13,15 +13,66 @@ public class Manager {
     private static final Gson gson = new Gson();
 
     public static User createUser() {
-        String uid = Helper.generateId(8);
-        String name = Names.getRandomName();
-        while (uidExists(uid))
-            uid = Helper.generateId(8);
-        while (nameExists(name))
-            name = Names.getRandomName();
+        String uid = newUid("");
+        String name = newName("");
         User result = new User(uid, name);
         users.add(result);
         return result;
+    }
+
+
+
+
+
+// uids are considered private, and when a user creates a game they will by default be player 1.
+// if you join a game, you are player two. this has no gameplay effect, just internal management.
+//"game_over" : "true/false"
+// if the game is ended, all results will be full b
+//"player_1_pts" : <example>,
+//"player_2_pts":<example>,
+// names of players below
+//"player_1_name" : "<example>",
+//"player_2_name" : "<example>", // if no 2nd player (i.e blank name), all game instance data is blank.
+//"round_type" : "<example "Jeopardy!">",
+//"current_stage" : "waiting"/"answer"/"select",
+// waiting means no 2nd player, answer and select are self explanatory.
+//"active_player" : <active player num>,
+// next, an array of 5 categories
+// these categories have arrays of five questions.
+// each question simply has an int value and an int index for the respective category.
+// if a question is active, the below question text and index will not be empty and contain the //question.
+//"question_text" : "<example>",
+//"question_index" : <example>,
+//{
+//[
+//"category_title" : "<some name>"
+//"category_index" : <some int>,
+// below is arr of five questions
+//{
+//[
+//"question_index" : <example>,
+//"point_value" : <example>,
+//"is_answered" : "true"/"false"
+//],
+// rest of questions...
+//}
+//],
+// rest of categories...
+//}
+//}
+    public static String fetchGameInfo(String input) {
+        record Parsed(String gid) {}
+        String gid;
+        try {
+            gid = gson.fromJson(input, Parsed.class).gid;
+        } catch (Exception e) {
+            return Helper.genericError(e.getMessage());
+        }
+        if (!gidExists(gid)) {
+            return Helper.genericError("game with gid %s does not exist", gid);
+        }
+        
+        
     }
 
     public static String joinGame(String input) {
@@ -126,8 +177,9 @@ public class Manager {
     }
 
     public static String newName(String s) {
-        if (nameExists(s))
+        if (nameInUse(s) || s.equals("")) {
             return newName(Names.getRandomName());
+        }
         return s;
     }
 
@@ -156,7 +208,7 @@ public class Manager {
         return "Anthony Tyler";
     }
 
-    public static boolean nameExists(String name) {
+    public static boolean nameInUse(String name) {
         for (User u : users)
             if (u.getName().equals(name))
                 return true;

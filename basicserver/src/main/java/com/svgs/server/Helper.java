@@ -43,6 +43,33 @@ public class Helper {
         return result;
     }
 
+    static String genericError(String message, Object... args) {
+        record Error(String error) {
+        }
+        if (message == null || message.isBlank())
+            message = "unknown error";
+
+        String result = message;
+        try {
+            if (args != null && args.length > 0)
+                result = String.format(message, args);
+        } catch (Exception ignored) {
+        }
+
+        return gson.toJson(new Error(result));
+    }
+
+    // works for millis
+    public static String formatTime(long unformatted) {
+        long tmp = unformatted;
+        long hours = tmp/(1000*60*60);
+        tmp %= (1000*60*60);
+        long minutes = tmp/(1000*60);
+        tmp %= (1000*60);
+        long seconds = tmp/1000;
+        return String.format("%02dhr:%02dm:%02ds", hours, minutes, seconds);
+    }
+
     static Connection createConnection(String db) {
         Connection conn;
         String url = "jdbc:sqlite:./src/main/resources/" + db;

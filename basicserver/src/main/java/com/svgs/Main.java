@@ -17,7 +17,6 @@ public class Main {
         port(4567);
         before((req, res) -> res.type("application/json"));
         get("api/initialize_user", "application/json", (req, res) -> gson.toJson(Manager.createUser()));
-        //post("api/create_game", "application/json", (req, res) -> Manager.createGame(req.body())); 
         post("api/create_game", "application/json", (req, res) -> {
             res.type("application/json");
             String body = req.body();
@@ -29,10 +28,11 @@ public class Main {
             res.type("application/json");
             return Manager.joinGame(req.body());
         });
-
+        get("/api/game_info", "application/json", (req, res) -> Manager.fetchGameInfo(req.body()));
 
         User user = Manager.createUser();
         System.out.println(Manager.createGame(gson.toJson(user, User.class)));
+
 
     }
 

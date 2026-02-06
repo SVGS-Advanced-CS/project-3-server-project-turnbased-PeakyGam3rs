@@ -17,6 +17,12 @@ public class Category {
         }
         return questions[index];
     }
+    public Question[] getQuestions() {
+        return questions;
+    }
+    public String getTitle() {
+        return title;
+    }
 
     public void print() {
         System.out.println(title);
