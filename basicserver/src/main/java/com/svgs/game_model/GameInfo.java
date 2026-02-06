@@ -23,6 +23,7 @@ public class GameInfo {
     // select certain levels of data to return
     public GameInfo report() {
         GameInfo result = new GameInfo();
+        result.event_log = this.event_log;
         result.game_over = this.game_over;
         result.player_1_pts = this.player_1_pts;
         result.player_2_pts = this.player_2_pts;
@@ -54,11 +55,6 @@ public class GameInfo {
         game = owner;
         event_log = new ArrayList<>();
         categorys = cats;
-        init();
-    }
-
-    private void init() {
-        logGenericEvent(String.format("game %s created by %s", game.getGid(), player_1_name));
     }
     // blank profile to copy wanted data over to for dto purposes
     private GameInfo() {}

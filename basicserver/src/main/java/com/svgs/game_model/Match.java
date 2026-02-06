@@ -14,6 +14,7 @@ public class Match {
     private HashMap<Integer, Question> questionMap; // so gson doesn't serialize answers in GameInfo
 
     public Match(User one, Category[] cats, String gid) {
+        questionMap = new HashMap<>();
         this.p1 = one;
         this.gid = gid;
         GameCategory[] kittens = new GameCategory[5];
@@ -49,8 +50,7 @@ public class Match {
         info.player_2_pts = 0;
         info.player_1_name = p1.getName();
         info.current_stage = "waiting";
-        info.active_player = ((int)(Math.random())==1?p1.getName():p2.getName());
-        
+        info.logGenericEvent(String.format("%s created game %s", p1.getName(), p1.getName()));
     }
     
     public boolean hasPlayerTwo() {
@@ -60,6 +60,8 @@ public class Match {
         p2 = u;
         info.player_2_name = p2.getName();
         info.player_2_pts = 0;
+        info.active_player = ((int) (Math.random()) == 1 ? p1.getName() : p2.getName());
+        info.logGenericEvent(String.format("%s joined the game",u.getName()));
     }
     public String getGid() {
         return gid;

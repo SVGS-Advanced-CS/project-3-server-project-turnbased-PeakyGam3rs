@@ -28,14 +28,15 @@ public class Main {
             return Manager.joinGame(req.body());
         });
         get("/api/game_info", "application/json", (req, res) -> {
-            String gid = req.params("gid");
+            res.type("application/json");
+            String gid = req.queryParamOrDefault("gid", null);
             if (gid == null) {
                 res.status(400);
-                return genericError("missing query parameter \"gid\"");
+                return genericError(String.format("missing query parameter \"%s\"",gid));
             }
             return Manager.fetchGameInfo(gid);
         });
-        
+
         User user = Manager.createUser();
         System.out.println(Manager.createGame(gson.toJson(user, User.class)));
 

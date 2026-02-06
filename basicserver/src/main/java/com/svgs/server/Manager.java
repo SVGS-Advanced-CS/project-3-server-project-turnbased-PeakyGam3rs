@@ -20,14 +20,7 @@ public class Manager {
         return result;
     }
 
-    public static String fetchGameInfo(String input) {
-        record Parsed(String gid) {}
-        String gid;
-        try {
-            gid = gson.fromJson(input, Parsed.class).gid;
-        } catch (Exception e) {
-            return Helper.genericError(e.getMessage());
-        }
+    public static String fetchGameInfo(String gid) {
         try {
             return gson.toJson(fetchGame(gid).getGameInfo());
         } catch (Exception e) {
