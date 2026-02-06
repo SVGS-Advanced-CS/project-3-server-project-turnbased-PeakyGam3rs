@@ -36,6 +36,35 @@ public class Main {
             }
             return Manager.fetchGameInfo(gid);
         });
+        post("/api/select_question", "application/json", (req,res) -> {
+            record Input(String uid, String gid, int question_index) {}
+            Input input;
+            try {
+                input = gson.fromJson(req.body(), Input.class);
+            } catch (Exception e) {
+                res.status(400);
+                return genericError("failed to parse input json");
+            }
+
+            String gid = input.gid;
+            String uid = input.uid;
+
+            int question_index = input.question_index;
+            if (gid.equals("")) {
+                res.status(400);
+                return genericError("input gid is empty");
+            }
+            if (uid.equals("")) {
+                res.status(400);
+                return genericError("input uid is empty");
+            }
+            if (question_index < 0 || question_index > 24) {
+                res.status(400);
+                return genericError(String.format("question index %d is out of range [0, 24]", question_index));
+            }
+            // no status code here for errors, srry
+            return Manager.selectQuestion(uid, gid, question_index);
+        });
 
         User user = Manager.createUser();
         System.out.println(Manager.createGame(gson.toJson(user, User.class)));

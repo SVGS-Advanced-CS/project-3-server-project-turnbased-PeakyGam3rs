@@ -44,7 +44,7 @@ public class Match {
         }
 
         // data is parsed, now prepare GameInfo
-        info = new GameInfo(this, kittens);
+        info = new GameInfo(this, kittens, p1);
         info.game_over = "false";
         info.player_1_pts = 0;
         info.player_2_pts = 0;
@@ -54,10 +54,13 @@ public class Match {
     }
     
     public boolean hasPlayerTwo() {
-        return p2 != null;
+        return info.p2 != null;
+    }
+    public boolean isGameOver() {
+        return info.game_over.equals("true");
     }
     public void setPlayerTwo(User u) {
-        p2 = u;
+        info.p2 = u;
         info.player_2_name = p2.getName();
         info.player_2_pts = 0;
         info.active_player = ((int) (Math.random()) == 1 ? p1.getName() : p2.getName());
@@ -66,9 +69,26 @@ public class Match {
     public String getGid() {
         return gid;
     }
+
+    public boolean isAnswered(int question_index) {
+        return getQuestion(question_index).is_answered;
+    }
+
+    public GameQuestion getQuestion(int question_index) {
+        return info.fetchQuestion(question_index);
+    }
+
     public boolean isPlaying(String uid) {
-        if (p2 == null) return p1.getUid().equals(uid);
-        return p1.getUid().equals(uid)||p2.getUid().equals(uid);
+        if (info.p2 == null) return info.p1.getUid().equals(uid);
+        return info.p1.getUid().equals(uid)||info.p2.getUid().equals(uid);
+    }
+
+    public User getActivePlayer() {
+        return info.translateName(info.active_player);
+    }
+
+    public String getStage() {
+        return info.current_stage;
     }
 
     public GameInfo getGameInfo() {

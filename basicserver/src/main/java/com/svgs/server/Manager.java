@@ -28,15 +28,48 @@ public class Manager {
         }
     }
 
+    public static String selectQuestion(String uid, String gid, int question_index) {
+        User u;
+        try {
+            u = fetchUser(uid);
+        } catch (Exception e) {
+            return genericError(e.getMessage());
+        }
+        Match g;
+        try {
+            g = fetchGame(gid);
+        } catch (Exception e) {
+            return genericError(e.getMessage());
+        }
+        if (!g.hasPlayerTwo()) {
+            return genericError(String.format("game %s has not started yet",gid));
+        }
+        if (g.isGameOver()) {
+            return genericError(String.format("game %s has ended", gid));
+        }
+        if (!g.isPlaying(uid)) {
+            return genericError(String.format("user %s is not in game %s", uid, gid));
+        }
+        if (!g.getStage().equals("select")) {
+            return genericError(String.format("game %s is not currently in a selection phase", gid));
+        }
+        if (!g.getActivePlayer().getUid().equals(uid)) {
+            return genericError(String.format("user %s is not currently the active player", uid));
+        }
+        if (g.isAnswered(question_index)) {
+            return genericError(String.format("question with index %d is already answered", question_index));
+        }
+        return g.selectQuestion(question_index);
+    }
+
     public static String joinGame(String input) {
         record Tmp(String uid, String gid){};
         Tmp tmp;
         record Success(String success){};
-        record Error(String success, String error) {};
         try {
             tmp = gson.fromJson(input, Tmp.class);
         } catch (Exception e) {
-            return gson.toJson(new Error("false",e.getMessage()), Error.class);
+            return genericError(e.getMessage());
         }
         String uid = tmp.uid;
         String gid = tmp.gid;
@@ -45,19 +78,19 @@ public class Manager {
         try {
             u = fetchUser(uid);
         } catch (Exception e) {
-            return gson.toJson(new Error("false", e.getMessage()), Error.class);
+            return genericError(e.getMessage());
         }
         if (isUserInGame(u.getUid())) {
-            return gson.toJson(new Error("false", "user is already in a game"), Error.class);
+            return genericError(String.format("user %s is already in a game", u.getUid()));
         }
         Match g;
         try {
             g = fetchGame(gid);
         } catch (Exception e) {
-            return gson.toJson(new Error("false", e.getMessage()), Error.class);
+            return genericError(e.getMessage());
         }
         if (g.hasPlayerTwo()) {
-            return gson.toJson(new Error("false", String.format("game with id %s is full.", gid)), Error.class);
+            return genericError(String.format("game with id %s is full.", gid));
         }
         g.setPlayerTwo(u);
         return gson.toJson(new Success(String.format("user with uid %s added to game %s",u.getUid(), g.getGid())), Success.class);
@@ -166,5 +199,9 @@ public class Manager {
             if (u.getName().equals(name))
                 return true;
         return false;
+    }
+    private static String genericError(String message) {
+        record Error(String error){}
+        return gson.toJson(new Error(message));
     }
 }

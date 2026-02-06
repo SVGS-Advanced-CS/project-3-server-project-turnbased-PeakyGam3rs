@@ -17,12 +17,15 @@ public class GameInfo {
     public String active_player; // active player name, or blank if none
     public GameCategory[] categorys;
     
+    public transient User p1;
+    public transient User p2;
     
     public ArrayList<Event> event_log;
 
     // select certain levels of data to return
     public GameInfo report() {
         GameInfo result = new GameInfo();
+        result.p1 = this.p1;
         result.event_log = this.event_log;
         result.game_over = this.game_over;
         result.player_1_pts = this.player_1_pts;
@@ -32,15 +35,28 @@ public class GameInfo {
         if (player_2_name == null) {
             return result;
         }
+        result.p2 = this.p2;
         result.active_player = this.active_player;
         result.player_2_name = this.player_2_name;
         result.current_stage = this.current_stage;
         result.categorys = this.categorys;
+        result.active_question_index = -1;
         if (current_stage.equals("select")) {
             return result;
         }
         result.active_question_index = this.active_question_index;
         return result;
+    }
+
+    public GameQuestion fetchQuestion(int question_index) {
+        for (GameCategory c : categorys) {
+            for (GameQuestion q : c.questions) {
+                if (q.question_index == question_index) {
+                    return q;
+                }
+            }
+        }
+        return new GameQuestion(-1, -1, false, "");
     }
 
     // NOTES:
@@ -50,12 +66,24 @@ public class GameInfo {
 
     private transient long startTime;
     private transient Match game;
-    public GameInfo(Match owner, GameCategory[] cats) {
+    public GameInfo(Match owner, GameCategory[] cats, User p1) {
         startTime = System.currentTimeMillis();
         game = owner;
         event_log = new ArrayList<>();
         categorys = cats;
+        this.p1 = p1;
     }
+
+    public User translateName(String playerName) {
+        if (p1.getName().equals(playerName)) {
+            return p1;
+        }
+        if (p2.getName().equals(playerName)) {
+            return p2;
+        }
+        return new User();
+    }
+
     // blank profile to copy wanted data over to for dto purposes
     private GameInfo() {}
     // prepares the gameInfo return
