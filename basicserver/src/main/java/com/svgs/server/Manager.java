@@ -93,7 +93,7 @@ public class Manager {
             return genericError(String.format("game with id %s is full.", gid));
         }
         g.setPlayerTwo(u);
-        return gson.toJson(new Success(String.format("user with uid %s added to game %s",u.getUid(), g.getGid())), Success.class);
+        return gson.toJson(new Success(String.format("user with uid %s added to game %s",u.getUid(), g.getGid())));
     }
 
     public static Match fetchGame(String gid) throws Exception {

@@ -61,13 +61,15 @@ public class Helper {
 
     // works for millis
     public static String formatTime(long unformatted) {
-        long tmp = unformatted;
-        long hours = tmp/(1000*60*60);
-        tmp %= (1000*60*60);
-        long minutes = tmp/(1000*60);
-        tmp %= (1000*60);
-        long seconds = tmp/1000;
-        return String.format("%02dhr:%02dm:%02ds", hours, minutes, seconds);
+        long time = unformatted%(1000*60*60*24);
+        long hours = time/(1000*60*60);
+        time %= (1000*60*60);
+        long minutes = time/(1000*60);
+        time %= (1000*60);
+        long seconds = time/1000;
+        time %= 1000;
+        long hundredths = time/10;
+        return String.format("%02d:%02d:%02d.%02ds", hours, minutes, seconds, hundredths);
     }
 
     static Connection createConnection(String db) {

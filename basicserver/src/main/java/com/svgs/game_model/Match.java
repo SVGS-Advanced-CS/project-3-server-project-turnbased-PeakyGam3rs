@@ -2,6 +2,7 @@ package com.svgs.game_model;
 
 import java.util.HashMap;
 
+import com.google.gson.Gson;
 import com.svgs.model.Category;
 import com.svgs.model.Question;
 
@@ -12,6 +13,7 @@ public class Match {
     private User p2;
     private GameInfo info; // basically a ledger
     private HashMap<Integer, Question> questionMap; // so gson doesn't serialize answers in GameInfo
+    private Gson gson = new Gson();
 
     public Match(User one, Category[] cats, String gid) {
         questionMap = new HashMap<>();
@@ -53,6 +55,21 @@ public class Match {
         info.logGenericEvent(String.format("%s created game %s", p1.getName(), gid));
     }
     
+    // request is already completely vetted, now update game_state
+    // question with active index is loaded properly when calling report(), no need to set it.
+    public String selectQuestion(int question_index) {
+        info.selectQuestion(question_index); // seems jank, but i only want to deal with ONE object as management
+        record Result(String question_text) {}
+        return gson.toJson(new Result(questionMap.get(question_index).getQuestion()));
+    }
+
+    public GameQuestion getGameQuestion(int question_index) {
+        return info.fetchQuestion(question_index);
+    }
+
+    public Question getQuestion(int question_index) {
+        return questionMap.get(question_index);
+    }
     public boolean hasPlayerTwo() {
         return info.p2 != null;
     }
@@ -71,15 +88,11 @@ public class Match {
     }
 
     public boolean isAnswered(int question_index) {
-        return getQuestion(question_index).is_answered;
-    }
-
-    public GameQuestion getQuestion(int question_index) {
-        return info.fetchQuestion(question_index);
+        return getGameQuestion(question_index).is_answered;
     }
 
     public boolean isPlaying(String uid) {
-        if (info.p2 == null) return info.p1.getUid().equals(uid);
+        if (info.current_stage.equals("waiting")) return info.p1.getUid().equals(uid);
         return info.p1.getUid().equals(uid)||info.p2.getUid().equals(uid);
     }
 

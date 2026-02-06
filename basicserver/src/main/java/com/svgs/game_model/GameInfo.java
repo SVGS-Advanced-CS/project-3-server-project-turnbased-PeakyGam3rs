@@ -22,6 +22,8 @@ public class GameInfo {
     
     public ArrayList<Event> event_log;
 
+    public transient long startTime;
+
     // select certain levels of data to return
     public GameInfo report() {
         GameInfo result = new GameInfo();
@@ -45,6 +47,7 @@ public class GameInfo {
             return result;
         }
         result.active_question_index = this.active_question_index;
+        
         return result;
     }
 
@@ -59,12 +62,17 @@ public class GameInfo {
         return new GameQuestion(-1, -1, false, "");
     }
 
+    public void selectQuestion(int question_index) {
+        this.current_stage = "answer";
+        this.active_question_index = question_index;
+        logSelectionEvent(question_index);
+    }
+
     // NOTES:
     // only active question/completed questions will have a non blank question text.
     // GameCategorys are initialized with blank question texts, no need to censor
     // this class only holds data about the game state
 
-    private transient long startTime;
     private transient Match game;
     public GameInfo(Match owner, GameCategory[] cats, User p1) {
         startTime = System.currentTimeMillis();
@@ -91,10 +99,22 @@ public class GameInfo {
     // data must be formatted properly, using json for simplicity
     // generic events are ignored for game logic, just included for users
     void logGenericEvent(String message) {
-        event_log.add(new genericEvent(formattedTime(), message));
+        event_log.add(new Event(game, message));
+    }
+    void logSelectionEvent(int question_index) {
+        String pName = this.active_player;
+        event_log.add(new SelectionEvent(game, pName, question_index));
     }
 
-    private String formattedTime() {
-        return com.svgs.server.Helper.formatTime(System.currentTimeMillis()-startTime);
+    public String formatTime(long input) {
+        long time = input%(1000*60*60*24); // time is toroidal ig, idc if it messes with TWENTY-FOUR HOUR GAMES!
+        long hours = time/(1000*60*60);
+        time %= (1000*60*60);
+        long minutes = time/(1000*60);
+        time %= (1000*60);
+        long seconds = time/1000;
+        time %=1000;
+        long hundredths = time/10;
+        return String.format("%02d:%02d:%02d.%02ds", hours, minutes, seconds, hundredths);
     }
 }
