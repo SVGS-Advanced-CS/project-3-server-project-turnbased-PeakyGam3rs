@@ -1,0 +1,70 @@
+<configuration scan="true" scanPeriod="10 seconds">
+
+  <property name="LOG_DIR" value="logs"/>
+
+  <!-- Normal console output (PowerShell terminal) -->
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <target>System.out</target>
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- API log file -->
+  <appender name="API_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_DIR}/api.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_DIR}/api.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>14</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- Framework (Spark/Jetty) log file -->
+  <appender name="FW_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_DIR}/framework.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_DIR}/framework.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>7</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{60} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- Error file (optional but clutch) -->
+  <appender name="ERR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_DIR}/error.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_DIR}/error.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{60} - %msg%n%ex{full}</pattern>
+    </encoder>
+  </appender>
+
+  <!-- YOUR API LOGGER (goes ONLY to api.log; does NOT clutter console) -->
+  <logger name="api" level="DEBUG" additivity="false">
+    <appender-ref ref="API_FILE"/>
+    <appender-ref ref="ERR_FILE"/>
+  </logger>
+
+  <!-- Spark + Jetty (go ONLY to framework.log; kept, not voided) -->
+  <logger name="spark" level="INFO" additivity="false">
+    <appender-ref ref="FW_FILE"/>
+  </logger>
+
+  <logger name="org.eclipse.jetty" level="INFO" additivity="false">
+    <appender-ref ref="FW_FILE"/>
+  </logger>
+
+  <!-- Normal/class logs still show in PowerShell -->
+  <root level="DEBUG">
+    <appender-ref ref="CONSOLE"/>
+    <appender-ref ref="ERR_FILE"/>
+  </root>
+
+</configuration>

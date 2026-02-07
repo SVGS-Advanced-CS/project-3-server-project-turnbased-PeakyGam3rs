@@ -2,18 +2,21 @@ package com.svgs.game_model;
 
 import java.util.Objects;
 
+import com.svgs.server.BadRequest;
+
 public class User {
     private String uid;
     private String name;
     
-    public User(String uid, String name) {
+    public User(String uid, String name) throws Exception {
+        if (uid == null || uid.length() != 8) {
+            throw new BadRequest("INVALID_INPUT", "invalid input for uid");
+        }
+        if (name == null || name.isEmpty()) {
+            throw new BadRequest("INVALID_INPUT", "idk u prolly screwed something up");
+        }
         this.uid = uid;
         this.name = name;
-    }
-
-    public User() {
-        uid = "";
-        name = "";
     }
     
     public String getUid() {

@@ -1,31 +1,36 @@
 package com.svgs.game_model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import com.svgs.model.Question;
+import com.svgs.server.BadRequest;
 
 
 // a class to store data for a Match, doubling as a dto
 public class GameInfo {
-
-    public String game_over; // "true"/"false"
-    public int player_1_pts;
-    public int player_2_pts;
-    public String player_1_name;
-    public String player_2_name; // blank if null, and if so, all below is null.
-    public String current_stage; // "waiting"/"answer"/"select"
-    public int active_question_index;
+    String gid;
+    String game_over; // "true"/"false"
+    int player_1_pts;
+    int player_2_pts;
+    String player_1_name;
+    String player_2_name; // blank if null, and if so, all below is null.
+    String current_stage; // "waiting"/"answer"/"select"
+    int active_question_index;
     // waiting means no player two
-    public String active_player; // active player name, or blank if none
-    public GameCategory[] categorys;
+    String active_player; // active player name, or blank if none
+    GameCategory[] categorys;
     
-    public transient User p1;
-    public transient User p2;
+    transient User p1;
+    transient User p2;
+    transient HashMap<Integer, Question> questionMap;
     
-    public ArrayList<Event> event_log;
+    ArrayList<Event> event_log;
 
-    public transient long startTime;
+    transient long startTime;
 
     // select certain levels of data to return
-    public GameInfo report() {
+    public GameInfo report() throws Exception {
         GameInfo result = new GameInfo();
         result.p1 = this.p1;
         result.event_log = this.event_log;
@@ -51,7 +56,7 @@ public class GameInfo {
         return result;
     }
 
-    public GameQuestion fetchQuestion(int question_index) {
+    GameQuestion fetchGameQuestion(int question_index) throws Exception {
         for (GameCategory c : categorys) {
             for (GameQuestion q : c.questions) {
                 if (q.question_index == question_index) {
@@ -59,10 +64,14 @@ public class GameInfo {
                 }
             }
         }
-        return new GameQuestion(-1, -1, false, "");
+        return null;
     }
 
-    public void selectQuestion(int question_index) {
+    Question getQuestion(int question_index) throws Exception {
+        return questionMap.get(question_index);
+    }
+
+    void selectQuestion(int question_index) throws Exception {
         this.current_stage = "answer";
         this.active_question_index = question_index;
         logSelectionEvent(question_index);
@@ -74,22 +83,24 @@ public class GameInfo {
     // this class only holds data about the game state
 
     private transient Match game;
-    public GameInfo(Match owner, GameCategory[] cats, User p1) {
+    GameInfo(Match owner, HashMap<Integer, Question> questionMap, GameCategory[] cats, User p1, String gid) {
         startTime = System.currentTimeMillis();
+        this.questionMap.equals(questionMap);
         game = owner;
         event_log = new ArrayList<>();
         categorys = cats;
         this.p1 = p1;
+        this.gid = gid;
     }
 
-    public User translateName(String playerName) {
+    User translateName(String playerName) throws Exception {
         if (p1.getName().equals(playerName)) {
             return p1;
         }
         if (p2.getName().equals(playerName)) {
             return p2;
         }
-        return new User();
+        throw new BadRequest("INVALID_NAME", String.format("no user with name %s in game", playerName));
     }
 
     // blank profile to copy wanted data over to for dto purposes
@@ -98,12 +109,12 @@ public class GameInfo {
     
     // data must be formatted properly, using json for simplicity
     // generic events are ignored for game logic, just included for users
-    void logGenericEvent(String message) {
-        event_log.add(new Event(game, message));
+    void logGenericEvent(String message) throws Exception {
+        event_log.add(new Event(this, message));
     }
-    void logSelectionEvent(int question_index) {
+    void logSelectionEvent(int question_index) throws Exception {
         String pName = this.active_player;
-        event_log.add(new SelectionEvent(game, pName, question_index));
+        event_log.add(new SelectionEvent(this, pName, question_index));
     }
 
     public String formatTime(long input) {

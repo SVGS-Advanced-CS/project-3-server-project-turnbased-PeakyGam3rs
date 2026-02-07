@@ -11,6 +11,8 @@ module com.svgs
     requires org.apache.commons.lang3;
     requires org.apache.commons.csv;
     requires spark.core;
+    requires ch.qos.logback.classic;
+    requires org.slf4j;
 
     opens com.svgs to javafx.fxml, com.google.gson;
     opens com.svgs.dtos to com.google.gson;

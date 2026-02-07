@@ -1,0 +1,203 @@
+2026-02-06 18:11:06.477 INFO  [main] api - INFO works
+2026-02-06 18:11:06.480 WARN  [main] api - WARN works
+2026-02-06 18:11:06.480 ERROR [main] api - ERROR works
+2026-02-06 19:54:24.542 INFO  [main] api - INFO works
+2026-02-06 19:54:24.543 WARN  [main] api - WARN works
+2026-02-06 19:54:24.544 ERROR [main] api - ERROR works
+2026-02-06 19:59:18.484 INFO  [main] api - INFO works
+2026-02-06 19:59:18.486 WARN  [main] api - WARN works
+2026-02-06 19:59:18.486 ERROR [main] api - ERROR works
+2026-02-06 20:00:20.058 ERROR [qtp474364832-52] api - rid=a97dd05b-78ee-442a-9016-a84e4f904c85 POST /api/join_game -> 500 INTERNAL_ERROR
+java.lang.NullPointerException: Cannot invoke "com.svgs.game_model.User.getName()" because "this.p2" is null
+	at com.svgs/com.svgs.game_model.Match.setPlayerTwo(Match.java:81)
+	at com.svgs/com.svgs.server.Manager.joinGame(Manager.java:87)
+	at com.svgs/com.svgs.Main.lambda$7(Main.java:80)
+	at spark.core@2.9.3/spark.RouteImpl$1.handle(RouteImpl.java:72)
+	at spark.core@2.9.3/spark.http.matching.Routes.execute(Routes.java:61)
+	at spark.core@2.9.3/spark.http.matching.MatcherFilter.doFilter(MatcherFilter.java:134)
+	at spark.core@2.9.3/spark.embeddedserver.jetty.JettyHandler.doHandle(JettyHandler.java:50)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1584)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:141)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127)
+	at org.eclipse.jetty.server.Server.handle(Server.java:501)
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$1(HttpChannel.java:383)
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:556)
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:375)
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:273)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:311)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:105)
+	at org.eclipse.jetty.io.ChannelEndPoint$1.run(ChannelEndPoint.java:104)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.runTask(EatWhatYouKill.java:336)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.doProduce(EatWhatYouKill.java:313)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.tryProduce(EatWhatYouKill.java:171)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.run(EatWhatYouKill.java:129)
+	at org.eclipse.jetty.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:375)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:806)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:938)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-02-06 20:00:21.677 INFO  [qtp474364832-52] api - rid=658409da-95fd-4c18-893f-3eb8f4f598b8 malformed json
+2026-02-06 20:16:25.567 INFO  [main] api - INFO works
+2026-02-06 20:16:25.568 WARN  [main] api - WARN works
+2026-02-06 20:16:25.568 ERROR [main] api - ERROR works
+2026-02-06 20:18:13.633 ERROR [qtp474364832-36] api - rid=882d69ce-813f-439c-9d41-347c973b7fc3 POST /api/create_game -> 500 INTERNAL_ERROR
+java.lang.NullPointerException: Cannot assign field "p1" because "this.info" is null
+	at com.svgs/com.svgs.game_model.Match.<init>(Match.java:19)
+	at com.svgs/com.svgs.server.Helper.newMatch(Helper.java:29)
+	at com.svgs/com.svgs.server.Manager.createGame(Manager.java:106)
+	at com.svgs/com.svgs.Main.lambda$6(Main.java:73)
+	at spark.core@2.9.3/spark.RouteImpl$1.handle(RouteImpl.java:72)
+	at spark.core@2.9.3/spark.http.matching.Routes.execute(Routes.java:61)
+	at spark.core@2.9.3/spark.http.matching.MatcherFilter.doFilter(MatcherFilter.java:134)
+	at spark.core@2.9.3/spark.embeddedserver.jetty.JettyHandler.doHandle(JettyHandler.java:50)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1584)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:141)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127)
+	at org.eclipse.jetty.server.Server.handle(Server.java:501)
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$1(HttpChannel.java:383)
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:556)
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:375)
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:273)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:311)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:105)
+	at org.eclipse.jetty.io.ChannelEndPoint$1.run(ChannelEndPoint.java:104)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.runTask(EatWhatYouKill.java:336)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.doProduce(EatWhatYouKill.java:313)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.tryProduce(EatWhatYouKill.java:171)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.produce(EatWhatYouKill.java:135)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:806)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:938)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-02-06 20:18:15.263 INFO  [qtp474364832-52] api - rid=7ac39d04-0d42-4da3-b432-5bd6b87c960c POST /api/join_game -> 404 NOT_FOUND
+2026-02-06 20:18:16.901 INFO  [qtp474364832-52] api - rid=b1807ced-f000-4a0c-9e9c-6fb09399e657 malformed json
+2026-02-06 20:22:05.959 INFO  [main] api - INFO works
+2026-02-06 20:22:05.961 WARN  [main] api - WARN works
+2026-02-06 20:22:05.961 ERROR [main] api - ERROR works
+2026-02-06 20:22:48.693 INFO  [qtp474364832-52] api - rid=56666458-3cdc-412c-b898-e11532b7c695 malformed json
+2026-02-06 20:29:00.471 INFO  [main] api - INFO works
+2026-02-06 20:29:00.472 WARN  [main] api - WARN works
+2026-02-06 20:29:00.472 ERROR [main] api - ERROR works
+2026-02-06 20:29:50.076 INFO  [qtp474364832-52] api - rid=5cc5073f-c7fd-4619-af45-1784687c2b8e POST /api/select_question -> 400 malformed json
+com.google.gson.JsonSyntaxException: com.google.gson.stream.MalformedJsonException: Unterminated object at line 3 column 3 path $.uid
+	at com.google.gson@2.10.1/com.google.gson.Gson.fromJson(Gson.java:1241)
+	at com.google.gson@2.10.1/com.google.gson.Gson.fromJson(Gson.java:1137)
+	at com.google.gson@2.10.1/com.google.gson.Gson.fromJson(Gson.java:1047)
+	at com.google.gson@2.10.1/com.google.gson.Gson.fromJson(Gson.java:982)
+	at com.svgs/com.svgs.server.Manager.selectQuestion(Manager.java:31)
+	at com.svgs/com.svgs.Main.lambda$9(Main.java:96)
+	at spark.core@2.9.3/spark.RouteImpl$1.handle(RouteImpl.java:72)
+	at spark.core@2.9.3/spark.http.matching.Routes.execute(Routes.java:61)
+	at spark.core@2.9.3/spark.http.matching.MatcherFilter.doFilter(MatcherFilter.java:134)
+	at spark.core@2.9.3/spark.embeddedserver.jetty.JettyHandler.doHandle(JettyHandler.java:50)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1584)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:141)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127)
+	at org.eclipse.jetty.server.Server.handle(Server.java:501)
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$1(HttpChannel.java:383)
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:556)
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:375)
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:273)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:311)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:105)
+	at org.eclipse.jetty.io.ChannelEndPoint$1.run(ChannelEndPoint.java:104)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.runTask(EatWhatYouKill.java:336)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.doProduce(EatWhatYouKill.java:313)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.tryProduce(EatWhatYouKill.java:171)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.run(EatWhatYouKill.java:129)
+	at org.eclipse.jetty.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:375)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:806)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:938)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: com.google.gson.stream.MalformedJsonException: Unterminated object at line 3 column 3 path $.uid
+	at com.google.gson@2.10.1/com.google.gson.stream.JsonReader.syntaxError(JsonReader.java:1659)
+	at com.google.gson@2.10.1/com.google.gson.stream.JsonReader.doPeek(JsonReader.java:500)
+	at com.google.gson@2.10.1/com.google.gson.stream.JsonReader.hasNext(JsonReader.java:422)
+	at com.google.gson@2.10.1/com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:387)
+	at com.google.gson@2.10.1/com.google.gson.Gson.fromJson(Gson.java:1227)
+	... 28 common frames omitted
+2026-02-06 20:36:24.469 ERROR [qtp474364832-53] api - rid=77aee41c-f2ee-4843-9db9-198825a80c25 POST /api/select_question -> 500 INTERNAL_ERROR
+java.lang.NullPointerException: Cannot invoke "String.equals(Object)" because "gid" is null
+	at com.svgs/com.svgs.server.Manager.selectQuestion(Manager.java:37)
+	at com.svgs/com.svgs.Main.lambda$9(Main.java:96)
+	at spark.core@2.9.3/spark.RouteImpl$1.handle(RouteImpl.java:72)
+	at spark.core@2.9.3/spark.http.matching.Routes.execute(Routes.java:61)
+	at spark.core@2.9.3/spark.http.matching.MatcherFilter.doFilter(MatcherFilter.java:134)
+	at spark.core@2.9.3/spark.embeddedserver.jetty.JettyHandler.doHandle(JettyHandler.java:50)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1584)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:141)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127)
+	at org.eclipse.jetty.server.Server.handle(Server.java:501)
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$1(HttpChannel.java:383)
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:556)
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:375)
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:273)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:311)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:105)
+	at org.eclipse.jetty.io.ChannelEndPoint$1.run(ChannelEndPoint.java:104)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.runTask(EatWhatYouKill.java:336)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.doProduce(EatWhatYouKill.java:313)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.tryProduce(EatWhatYouKill.java:171)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.run(EatWhatYouKill.java:129)
+	at org.eclipse.jetty.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:375)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:806)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:938)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-02-06 20:36:44.441 INFO  [main] api - INFO works
+2026-02-06 20:36:44.443 WARN  [main] api - WARN works
+2026-02-06 20:36:44.443 ERROR [main] api - ERROR works
+2026-02-06 20:36:53.937 ERROR [qtp820334759-49] api - rid=8ef57498-9f9c-4f84-86c3-e06faa371bdf POST /api/select_question -> 500 INTERNAL_ERROR
+java.lang.NullPointerException: Cannot invoke "String.equals(Object)" because "gid" is null
+	at com.svgs/com.svgs.server.Manager.selectQuestion(Manager.java:37)
+	at com.svgs/com.svgs.Main.lambda$9(Main.java:96)
+	at spark.core@2.9.3/spark.RouteImpl$1.handle(RouteImpl.java:72)
+	at spark.core@2.9.3/spark.http.matching.Routes.execute(Routes.java:61)
+	at spark.core@2.9.3/spark.http.matching.MatcherFilter.doFilter(MatcherFilter.java:134)
+	at spark.core@2.9.3/spark.embeddedserver.jetty.JettyHandler.doHandle(JettyHandler.java:50)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1584)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:141)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127)
+	at org.eclipse.jetty.server.Server.handle(Server.java:501)
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$1(HttpChannel.java:383)
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:556)
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:375)
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:273)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:311)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:105)
+	at org.eclipse.jetty.io.ChannelEndPoint$1.run(ChannelEndPoint.java:104)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.runTask(EatWhatYouKill.java:336)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.doProduce(EatWhatYouKill.java:313)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.tryProduce(EatWhatYouKill.java:171)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.run(EatWhatYouKill.java:129)
+	at org.eclipse.jetty.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:375)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:806)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:938)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-02-06 20:39:11.301 INFO  [main] api - INFO works
+2026-02-06 20:39:11.303 WARN  [main] api - WARN works
+2026-02-06 20:39:11.303 ERROR [main] api - ERROR works
+2026-02-06 20:39:25.355 INFO  [qtp820334759-49] api - rid=f14aafb4-b11c-41ab-9613-535b0950ccfc POST /api/select_question -> 400 BAD_FIELD
+2026-02-06 20:40:07.335 INFO  [qtp820334759-47] api - rid=d577c101-6841-43ed-8367-6c686786a027 malformed json
+2026-02-06 20:40:13.807 INFO  [qtp820334759-49] api - rid=40342db2-99da-438b-a5b8-f0282a8aebe2 POST /api/select_question -> 404 NOT_FOUND
+2026-02-06 20:46:46.921 INFO  [qtp820334759-53] api - rid=0fb5067b-112a-43a8-8593-2c81f21dc966 POST /api/select_question -> 404 NOT_FOUND
+2026-02-06 20:46:55.546 INFO  [qtp820334759-55] api - rid=faa356a2-5143-445c-a970-6b4198171c78 POST /api/select_question -> 404 NOT_FOUND
+2026-02-06 20:46:57.588 INFO  [qtp820334759-53] api - rid=842f4e5f-f48f-43dc-a0aa-3a6fea91646f POST /api/select_question -> 404 NOT_FOUND
+2026-02-06 20:48:44.650 INFO  [qtp820334759-53] api - rid=7fe0ff1b-443d-4f39-90e2-7f633c467a0d POST /api/select_question -> 409 WRONG_PHASE
+2026-02-06 21:06:13.527 INFO  [main] api - INFO works
+2026-02-06 21:06:13.528 WARN  [main] api - WARN works
+2026-02-06 21:06:13.528 ERROR [main] api - ERROR works
+2026-02-06 23:20:38.036 INFO  [main] api - INFO works
+2026-02-06 23:20:38.037 WARN  [main] api - WARN works
+2026-02-06 23:20:38.038 ERROR [main] api - ERROR works
+2026-02-06 23:27:48.443 INFO  [main] api - INFO works
+2026-02-06 23:27:48.445 WARN  [main] api - WARN works
+2026-02-06 23:27:48.445 ERROR [main] api - ERROR works
+2026-02-06 23:29:23.745 INFO  [qtp427418061-51] api - rid=abd90c35-29ad-4314-b5e7-a64aa31b298f POST /api/join_game -> 409 USER_IN_GAME
+2026-02-06 23:30:00.857 INFO  [qtp427418061-49] api - rid=19d6299b-f537-427c-a28e-47402e9da7bf POST /api/join_game -> 409 USER_IN_GAME
+2026-02-06 23:30:01.933 INFO  [qtp427418061-51] api - rid=eda0fe09-52e9-43a0-8da2-fe4b19df67ed POST /api/join_game -> 409 USER_IN_GAME
+2026-02-06 23:30:04.048 INFO  [qtp427418061-49] api - rid=080be7eb-08c2-4ee2-b254-e0bd1fcddeb1 POST /api/join_game -> 409 USER_IN_GAME
+2026-02-06 23:31:01.411 INFO  [qtp427418061-51] api - rid=041b05a7-8bcd-443d-ac97-0aafa9b468b1 POST /api/select_question -> 409 WRONG_PHASE
+2026-02-06 23:31:04.602 INFO  [qtp427418061-49] api - rid=630320ce-7077-48e7-b1af-f872f7b703e1 POST /api/select_question -> 409 WRONG_PHASE
+2026-02-06 23:31:09.380 INFO  [qtp427418061-51] api - rid=6b898326-47ce-424b-aa2c-43a03ac7e461 POST /api/select_question -> 409 WRONG_PHASE
+2026-02-06 23:31:12.879 INFO  [qtp427418061-49] api - rid=6a9ae39b-7dc0-4b2f-95c9-d78a9cf3aa43 POST /api/create_game -> 409 IN_GAME
+2026-02-06 23:34:04.234 INFO  [qtp427418061-55] api - rid=45dbb6a9-2878-49f1-a8cc-797f4e9d1c72 POST /api/select_question -> 409 WRONG_PHASE
+2026-02-06 23:34:12.216 INFO  [qtp427418061-57] api - rid=ad53acf4-19c6-4188-b412-da16905dc5f7 POST /api/create_game -> 409 IN_GAME
+2026-02-06 23:34:23.379 INFO  [qtp427418061-55] api - rid=336d8a2e-610c-441e-8b8f-515b2aa557af POST /api/create_game -> 409 IN_GAME

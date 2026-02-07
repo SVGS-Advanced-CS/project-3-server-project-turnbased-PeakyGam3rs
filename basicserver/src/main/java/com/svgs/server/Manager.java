@@ -1,6 +1,6 @@
 package com.svgs.server;
 
-import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.gson.Gson;
 import com.svgs.dtos.Usr;
@@ -8,200 +8,161 @@ import com.svgs.game_model.Match;
 import com.svgs.game_model.User;
 
 public class Manager {
-    private static final ArrayList<User> users = new ArrayList<>();
-    private static final ArrayList<Match> games = new ArrayList<>();
+    private static final ConcurrentHashMap<String, User> usersById = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, Match> gamesById = new ConcurrentHashMap<>();
     private static final Gson gson = new Gson();
 
-    public static User createUser() {
-        String uid = newUid("");
-        String name = newName("");
+    public static User createUser() throws Exception {
+        String uid = newUid();
+        String name = newName();
         User result = new User(uid, name);
-        users.add(result);
+        usersById.put(uid, result);
         return result;
     }
 
-    public static String fetchGameInfo(String gid) {
-        try {
+    public static String fetchGameInfo(String gid) throws Exception {
             return gson.toJson(fetchGame(gid).getGameInfo());
-        } catch (Exception e) {
-            return Helper.genericError(e.getMessage());
-        }
     }
 
-    public static String selectQuestion(String uid, String gid, int question_index) {
-        User u;
-        try {
-            u = fetchUser(uid);
-        } catch (Exception e) {
-            return genericError(e.getMessage());
+    public static String selectQuestion(String input_json) throws Exception{
+        record Input(String uid, String gid, int question_index) {}
+        Input input;
+        input = gson.fromJson(input_json, Input.class);
+
+        String gid = input.gid;
+        String uid = input.uid;
+
+        int question_index = input.question_index;
+        if (gid == null || gid.equals("")) {
+            throw new BadRequest("BAD_FIELD", "field gid empty");
         }
-        Match g;
-        try {
-            g = fetchGame(gid);
-        } catch (Exception e) {
-            return genericError(e.getMessage());
+        if (uid.equals("")) {
+            throw new BadRequest("BAD_FIELD", "field uid empty");
         }
+        if (question_index < 0 || question_index > 24) {
+            throw new BadRequest("INVALID_INPUT", String.format("question index %d out of range [0,24]",question_index));
+        }
+
+        User u = fetchUser(uid);
+        Match g = fetchGame(gid);
+        
         if (!g.hasPlayerTwo()) {
-            return genericError(String.format("game %s has not started yet",gid));
+            throw new Conflict("NO_PLAYER_TWO", "waiting on 2nd player");
         }
         if (g.isGameOver()) {
-            return genericError(String.format("game %s has ended", gid));
+            throw new Conflict("GAME_OVER", "this game is over");
         }
         if (!g.isPlaying(uid)) {
-            return genericError(String.format("user %s is not in game %s", uid, gid));
+            throw new Conflict("NOT_IN_GAME", String.format("user not in game"));
         }
         if (!g.getStage().equals("select")) {
-            return genericError(String.format("game %s is not currently in a selection phase", gid));
+            throw new Conflict("WRONG_PHASE", "not in selection phase");
         }
         if (!g.getActivePlayer().getUid().equals(uid)) {
-            return genericError(String.format("user %s is not currently the active player", uid));
+            throw new Conflict("WRONG_TURN", "user is not currently the active player");
         }
         if (g.isAnswered(question_index)) {
-            return genericError(String.format("question with index %d is already answered", question_index));
+            throw new Conflict("ALREADY_ANSWERED", "this question is already answered");
         }
         return g.selectQuestion(question_index);
     }
 
-    public static String joinGame(String input) {
+    public static String joinGame(String input) throws Exception {
         record Tmp(String uid, String gid){};
-        Tmp tmp;
+        Tmp tmp = gson.fromJson(input, Tmp.class);
         record Success(String success){};
-        try {
-            tmp = gson.fromJson(input, Tmp.class);
-        } catch (Exception e) {
-            return genericError(e.getMessage());
-        }
         String uid = tmp.uid;
         String gid = tmp.gid;
         
-        User u;
-        try {
-            u = fetchUser(uid);
-        } catch (Exception e) {
-            return genericError(e.getMessage());
+        User u = fetchUser(uid);
+        
+        if (isUserInGame(uid)) {
+            throw new Conflict("USER_IN_GAME", String.format("user w/ uid %s in other game", uid));
         }
-        if (isUserInGame(u.getUid())) {
-            return genericError(String.format("user %s is already in a game", u.getUid()));
-        }
-        Match g;
-        try {
-            g = fetchGame(gid);
-        } catch (Exception e) {
-            return genericError(e.getMessage());
-        }
+        Match g = fetchGame(gid);
+        
         if (g.hasPlayerTwo()) {
-            return genericError(String.format("game with id %s is full.", gid));
+            throw new Conflict("FULL_GAME", String.format("game w/ gid %s is full", gid));
         }
         g.setPlayerTwo(u);
         return gson.toJson(new Success(String.format("user with uid %s added to game %s",u.getUid(), g.getGid())));
     }
 
     public static Match fetchGame(String gid) throws Exception {
-        for (Match g : games) {
-            if (g.getGid().equals(gid)) {
-                return g;
-            }
+        if (gamesById.containsKey(gid)) {
+            return gamesById.get(gid);
         }
-        throw new Exception(String.format("game with gid %s does not exist", gid));
+        throw new NotFound("NOT_FOUND", String.format("no game with gid %s", gid));
     }
     
-    public static String createGame(String inputJson) {
+    public static String createGame(String inputJson) throws Exception {
         Usr tmp = gson.fromJson(inputJson, Usr.class);
-        System.out.println("parsed uid: " + tmp.uid);
-        User u;
-        try {
-            u = fetchUser(tmp.uid);
-        } catch (Exception e) {
-            return (Helper.errorMessage("uid doesn't exist"));
-        }
+        User u = fetchUser(tmp.uid);
         if (isUserInGame(tmp.uid)) {
-            return Helper.errorMessage("User is already in a game.");
+            throw new Conflict("IN_GAME", String.format("user w/ uid %s in other game", tmp.uid));
         }
-        System.out.println("made it past the tests");
-        Match game = Helper.newMatch(u, newGid(""));
-        games.add(game);
-        System.out.println(game.getGid());
+        Match game = Helper.newMatch(u, newGid());
+        gamesById.put(game.getGid(), game);
         return game.getGid();
     }
 
     static User fetchUser(String uid) throws Exception {
-        for (User u : users) {
-            if (u.getUid().equals(uid)) {
-                return u;
-            }
+        if (usersById.contains(uid)) {
+            return usersById.get(uid);
         }
-        throw new Exception(String.format("user with uid %s does not exist", uid));
+        throw new NotFound("NOT_FOUND", String.format("no user with uid %s",uid));
     }
-    static String gidResult(String gid) {
+    
+    static String gidResult(String gid) throws Exception {
         record res(String gid) {}
         return gson.toJson(new res(gid), res.class);
     }
  
-    public static boolean isUserInGame(String uid) {
-        for (Match g : games)
+    public static boolean isUserInGame(String uid) throws Exception {
+        for (Match g : gamesById.values())
             if (g.isPlaying(uid))
                 return true;
         return false;
     }
 
-    public static String newGid(String s) {
-        if (s.length() != 4) {
-            return newGid(Helper.generateId(4));
+    public static String newGid() {
+        String result = Helper.generateId(4);
+        while (gamesById.containsKey(result)) {
+            result = Helper.generateId(4);
         }
-        if (gidExists(s)) {
-            return newGid(Helper.generateId(4));
-        }
-        return s;
+        return result;
     }
 
-    public static String newUid(String s) {
-        if (s.length() != 8)
-            return newUid(Helper.generateId(8));
-        if (uidExists(s))
-            return newUid(Helper.generateId(8));
-        return s;
+    public static String newUid() {
+        String result = Helper.generateId(8);
+        while (usersById.containsKey(result)) {
+            result = Helper.generateId(8);
+        }
+        return result;
     }
 
-    public static String newName(String s) {
-        if (nameInUse(s) || s.equals("")) {
-            return newName(Names.getRandomName());
+    public static String newName() throws Exception {
+        String result = Names.getRandomName();
+        while (nameInUse(result)) {
+            result = Names.getRandomName();
         }
-        return s;
+        return result;
     }
 
     public static boolean gidExists(String gid) {
-        for (Match g : games) {
-            if (g.getGid().equals(gid)) {
-                return true;
-            }
-        }
-        return false;
+        return gamesById.containsKey(gid);
     }
 
     public static boolean uidExists(String uid) {
-        for (User u : users) {
-            if (u.getUid().equals(uid)) {
+        return usersById.containsKey(uid);
+    }
+
+    public static boolean nameInUse(String name) {
+        for (User u : usersById.values()){
+            if (u.getName().equals(name)) {
                 return true;
             }
         }
         return false;
-    }
-
-    public static String findName(String uid) {
-        for (User u : users)
-            if (u.getUid().equals(uid))
-                return u.getName();
-        return "Anthony Tyler";
-    }
-
-    public static boolean nameInUse(String name) {
-        for (User u : users)
-            if (u.getName().equals(name))
-                return true;
-        return false;
-    }
-    private static String genericError(String message) {
-        record Error(String error){}
-        return gson.toJson(new Error(message));
     }
 }

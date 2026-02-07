@@ -1,0 +1,8 @@
+2026-02-07 00:33:33.445 INFO  [main] api - INFO works
+2026-02-07 00:33:33.454 WARN  [main] api - WARN works
+2026-02-07 00:33:33.454 ERROR [main] api - ERROR works
+2026-02-07 00:33:43.319 INFO  [qtp1088079239-45] api - rid=d2b271bd-e05b-4f6b-84f4-947ce0c6dc60 POST /api/create_game -> 404 NOT_FOUND
+2026-02-07 00:33:43.438 INFO  [qtp1088079239-56] api - rid=4b4ef40a-442a-4403-82f3-9022a5e6daaa POST /api/join_game -> 404 NOT_FOUND
+2026-02-07 00:33:43.486 INFO  [qtp1088079239-54] api - rid=e0c51079-080a-4701-b92b-b351621b0dbc GET /api/game_info -> 400 INVALID_GID
+2026-02-07 00:33:43.535 INFO  [qtp1088079239-56] api - rid=99e49279-1d1a-437e-8fbd-2f763261e61c POST /api/select_question -> 400 BAD_FIELD
+2026-02-07 00:34:02.322 INFO  [qtp1088079239-56] api - rid=c558fb77-042c-48be-abf3-95260d4ecc59 POST /api/create_game -> 404 NOT_FOUND
