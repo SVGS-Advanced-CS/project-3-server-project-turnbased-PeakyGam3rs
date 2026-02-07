@@ -107,7 +107,7 @@ public class Manager {
     }
 
     static User fetchUser(String uid) throws Exception {
-        if (usersById.contains(uid)) {
+        if (usersById.containsKey(uid)) {
             return usersById.get(uid);
         }
         throw new NotFound("NOT_FOUND", String.format("no user with uid %s",uid));

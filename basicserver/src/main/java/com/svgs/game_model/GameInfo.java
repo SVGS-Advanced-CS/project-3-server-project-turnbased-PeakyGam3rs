@@ -85,7 +85,7 @@ public class GameInfo {
     private transient Match game;
     GameInfo(Match owner, HashMap<Integer, Question> questionMap, GameCategory[] cats, User p1, String gid) {
         startTime = System.currentTimeMillis();
-        this.questionMap.equals(questionMap);
+        this.questionMap = questionMap;
         game = owner;
         event_log = new ArrayList<>();
         categorys = cats;

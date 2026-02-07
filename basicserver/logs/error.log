@@ -6,3 +6,46 @@
 2026-02-07 00:33:43.486 INFO  [qtp1088079239-54] api - rid=e0c51079-080a-4701-b92b-b351621b0dbc GET /api/game_info -> 400 INVALID_GID
 2026-02-07 00:33:43.535 INFO  [qtp1088079239-56] api - rid=99e49279-1d1a-437e-8fbd-2f763261e61c POST /api/select_question -> 400 BAD_FIELD
 2026-02-07 00:34:02.322 INFO  [qtp1088079239-56] api - rid=c558fb77-042c-48be-abf3-95260d4ecc59 POST /api/create_game -> 404 NOT_FOUND
+2026-02-07 09:38:52.041 INFO  [main] api - INFO works
+2026-02-07 09:38:52.043 WARN  [main] api - WARN works
+2026-02-07 09:38:52.043 ERROR [main] api - ERROR works
+2026-02-07 09:39:56.183 INFO  [qtp427418061-37] api - rid=338b38e7-74ff-4f92-b2cd-fbc3f0c330c9 POST /api/create_game -> 404 NOT_FOUND
+2026-02-07 09:39:56.298 INFO  [qtp427418061-52] api - rid=8a318ad9-6fcb-4904-b900-2b5dab0c47e2 POST /api/join_game -> 404 NOT_FOUND
+2026-02-07 09:39:56.342 INFO  [qtp427418061-50] api - rid=519de811-e17b-405a-ae7f-0b560334d637 GET /api/game_info -> 400 INVALID_GID
+2026-02-07 09:39:56.459 INFO  [qtp427418061-52] api - rid=7a793b60-2806-4d3f-a79b-ccb361a38d24 POST /api/select_question -> 400 BAD_FIELD
+2026-02-07 09:40:18.963 INFO  [qtp427418061-52] api - rid=62e0ff1f-9117-4cbc-98a4-e192186fecf8 POST /api/create_game -> 404 NOT_FOUND
+2026-02-07 09:42:09.233 INFO  [main] api - INFO works
+2026-02-07 09:42:09.235 WARN  [main] api - WARN works
+2026-02-07 09:42:09.235 ERROR [main] api - ERROR works
+2026-02-07 09:42:39.134 ERROR [qtp427418061-38] api - rid=137e0fa8-5e0e-4a50-96a6-f6428cd9621c POST /api/create_game -> 500 INTERNAL_ERROR
+java.lang.NullPointerException: Cannot invoke "java.util.HashMap.equals(Object)" because "this.questionMap" is null
+	at com.svgs/com.svgs.game_model.GameInfo.<init>(GameInfo.java:88)
+	at com.svgs/com.svgs.game_model.Match.<init>(Match.java:45)
+	at com.svgs/com.svgs.server.Helper.newMatch(Helper.java:52)
+	at com.svgs/com.svgs.server.Manager.createGame(Manager.java:104)
+	at com.svgs/com.svgs.Main.lambda$8(Main.java:88)
+	at spark.core@2.9.3/spark.RouteImpl$1.handle(RouteImpl.java:72)
+	at spark.core@2.9.3/spark.http.matching.Routes.execute(Routes.java:61)
+	at spark.core@2.9.3/spark.http.matching.MatcherFilter.doFilter(MatcherFilter.java:134)
+	at spark.core@2.9.3/spark.embeddedserver.jetty.JettyHandler.doHandle(JettyHandler.java:50)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1584)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:141)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127)
+	at org.eclipse.jetty.server.Server.handle(Server.java:501)
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$1(HttpChannel.java:383)
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:556)
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:375)
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:273)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:311)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:105)
+	at org.eclipse.jetty.io.ChannelEndPoint$1.run(ChannelEndPoint.java:104)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.runTask(EatWhatYouKill.java:336)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.doProduce(EatWhatYouKill.java:313)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.tryProduce(EatWhatYouKill.java:171)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.produce(EatWhatYouKill.java:135)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:806)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:938)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-02-07 09:42:39.256 INFO  [qtp427418061-51] api - rid=40e7a937-3736-4b2a-b65a-ceaee4ba49af POST /api/join_game -> 404 NOT_FOUND
+2026-02-07 09:42:39.304 INFO  [qtp427418061-49] api - rid=c1cadc68-d5bd-4780-9c47-b8c7e7b5c781 GET /api/game_info -> 400 INVALID_GID
+2026-02-07 09:42:39.354 INFO  [qtp427418061-51] api - rid=4b264536-2e23-46dd-8644-9c0e8cad3d03 POST /api/select_question -> 400 BAD_FIELD
