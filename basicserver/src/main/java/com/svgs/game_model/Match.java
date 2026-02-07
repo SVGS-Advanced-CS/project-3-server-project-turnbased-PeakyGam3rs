@@ -2,17 +2,21 @@ package com.svgs.game_model;
 
 import java.util.HashMap;
 
-import com.google.gson.Gson;
+import org.apache.commons.text.similarity.JaroWinklerSimilarity;
+
 import com.svgs.model.Category;
 import com.svgs.model.Question;
 import com.svgs.server.BadRequest;
 
 // more abstracted class for internal management
 public class Match {
-    private GameInfo info; // basically a ledger
-    private Gson gson = new Gson();
+    private final GameInfo info; // basically a ledger
+    private static final JaroWinklerSimilarity JWS = new JaroWinklerSimilarity();
+    private long startTime;
+
 
     public Match(User one, Category[] cats, String gid_in) throws Exception {
+        startTime = System.currentTimeMillis();
         HashMap<Integer, Question> questionMap = new HashMap<>();
         String gid = gid_in;
         GameCategory[] kittens = new GameCategory[5];
@@ -42,7 +46,7 @@ public class Match {
         }
 
         // data is parsed, now prepare GameInfo
-        info = new GameInfo(this, questionMap, kittens, one, gid);
+        info = new GameInfo(this, questionMap, kittens, one, gid, startTime);
         info.game_over = "false";
         info.player_1_pts = 0;
         info.player_2_pts = 0;
@@ -53,25 +57,81 @@ public class Match {
     
     // request is already completely vetted, now update game_state
     // question with active index is loaded properly when calling report(), no need to set it.
-    public String selectQuestion(int question_index) throws Exception {
-        info.selectQuestion(question_index); // seems jank, but i only want to deal with ONE object as management
-        record Result(String question_text) {}
-        return gson.toJson(new Result(info.getQuestion(question_index).getQuestion()));
+    public void selectQuestion(int question_index) {
+        info.selectQuestion(question_index); // seems jank, but i only want to deal with ONE object in Manager
     }
 
-    public GameQuestion getGameQuestion(int question_index) throws Exception {
+    public void answer(int question_index, boolean is_correct, User nerd, String inputRaw) {
+        Question q = info.questionMap.get(question_index);
+        int points_change = q.getValue();
+        if (!is_correct) {
+            points_change *= -1;
+        }
+        boolean isPlayerOne = info.player_1_name.equals(nerd.getName());
+
+        // update gamestate. phase -> select, player -> not who just answered, update player points
+        info.current_stage = "select";
+        if (isPlayerOne) {
+            info.player_1_pts += points_change;
+            info.active_player = info.player_2_name;
+        } else {
+            info.player_2_pts += points_change;
+            info.active_player = info.player_1_name;
+        }
+
+        // log answer
+        info.event_log.add(new AnswerEvent(timeStamp(), question_index, inputRaw, nerd, q, is_correct));
+    }
+
+    public boolean isCorrect(int question_index, String inputRaw) {
+        String answerRaw = info.questionMap.get(question_index).getQuestion();
+        String a1 = normalizeAnswer(inputRaw);
+        String a2 = normalizeAnswer(answerRaw);
+
+        if (a2.length() <= 5) {
+            return a1.equals(a2);
+        }
+
+        // found this on google, and i already had apache commmons text in my pom lol
+        double score = JWS.apply(a1, a2);
+
+        return score >= 0.90;
+    }
+
+    static String normalizeAnswer(String input) {
+        String result = input;
+        result = result.toLowerCase();
+        result = result.trim();
+        result = result.replaceAll("[^a-z0-9\\s]", "");
+        result = result.replaceAll("^(what is|who is|where is|where are|what are|who are)\\s+", "");
+        result = result.replaceAll("\\s+", " ");
+        result = result.replaceAll("^(the|a|an)\\s+", "");
+        return result;
+    }
+
+    public boolean userCanAnswer(User u) {
+        return info.current_stage.equals("answer")&&info.active_player.equals(u.getName());
+    }
+
+    public boolean questionIsAnswered(int question_index) {
+        return getGameQuestion(question_index).is_answered;
+    }
+    public GameQuestion getGameQuestion(int question_index) {
         return info.fetchGameQuestion(question_index);
     }
 
     public Question getQuestion(int question_index) throws Exception {
         return info.getQuestion(question_index);
     }
+
     public boolean hasPlayerTwo() {
         return info.p2 != null;
     }
+
     public boolean isGameOver() {
         return info.game_over.equals("true");
     }
+
     public void setPlayerTwo(User u) throws Exception {
         info.p2 = u;
         if (u == null) {
@@ -85,6 +145,14 @@ public class Match {
     }
     public String getGid() {
         return info.gid;
+    }
+
+    public boolean isActivePlayer(User u) {
+        return this.info.active_player.equals(u.getName());
+    }
+
+    public boolean canSelect() {
+        return info.current_stage.equals("select");
     }
 
     public boolean isAnswered(int question_index) throws Exception {
@@ -115,5 +183,20 @@ public class Match {
             }
         }
         return true;
+    }
+
+    private String timeStamp() {
+        return formatTime(System.currentTimeMillis() - startTime);
+    }
+    private String formatTime(long ms) {
+        long time = ms%(1000*60*60*24);
+        long hours = ms/(1000*60*60);
+        time %= (1000*60*60);
+        long minutes = time/(1000*60);
+        time %= (1000*60);
+        long seconds = time/(1000);
+        time %= 1000;
+        long hundredths = time/10;
+        return String.format("%02d:%02d:%02d.%02ds", hours, minutes, seconds, hundredths);
     }
 }

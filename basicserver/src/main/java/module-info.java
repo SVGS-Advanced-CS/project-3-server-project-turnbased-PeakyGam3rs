@@ -18,6 +18,8 @@ module com.svgs
     opens com.svgs.dtos to com.google.gson;
     opens com.svgs.game_model to com.google.gson;
     opens com.svgs.server to com.google.gson;
+    opens com.svgs.req_dtos to com.google.gson;
+    opens com.svgs.resp_model to com.google.gson;
 
     exports com.svgs;
 }

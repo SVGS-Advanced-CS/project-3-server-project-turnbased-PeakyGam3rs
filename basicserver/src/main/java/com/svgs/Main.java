@@ -7,10 +7,18 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.svgs.req_dtos.AnswerQuestionRequest;
+import com.svgs.req_dtos.CreateGameRequest;
+import com.svgs.req_dtos.GameInfoRequest;
+import com.svgs.req_dtos.JoinGameRequest;
+import com.svgs.req_dtos.SelectQuestionRequest;
 import com.svgs.server.ApiException;
 import com.svgs.server.BadRequest;
 import com.svgs.server.Manager;
 
+import spark.Request;
+import spark.Response;
+import spark.Route;
 import static spark.Spark.afterAfter;
 import static spark.Spark.before;
 import static spark.Spark.exception;
@@ -19,6 +27,7 @@ import static spark.Spark.options;
 import static spark.Spark.port;
 import static spark.Spark.post;
 
+// handles inbound and outbound serialization
 public class Main {
     private static Gson gson = new Gson();
     private static final Logger API = LoggerFactory.getLogger("api");
@@ -60,15 +69,6 @@ public class Main {
             res.body(gson.toJson(new ErrorResponse(e.code, e.safeMessage, rid)));
         });
 
-        // code bugs, not bc api input
-        exception(Exception.class, (e, req, res) -> {
-            String rid = req.attribute("rid");
-            API.error("rid={} {} {} -> 500 INTERNAL_ERROR", rid, req.requestMethod(), req.pathInfo(), e);
-            res.type("application/json");
-            res.status(500);
-            res.body(gson.toJson(new ErrorResponse("INTERNAL_ERROR", "ssshhhh, u didnt see this", rid)));
-        });
-
         // api error so common it got its own special case
         exception(JsonSyntaxException.class, (e, req, res) -> {
             String rid = req.attribute("rid");
@@ -78,38 +78,53 @@ public class Main {
             res.body(gson.toJson(new ErrorResponse("MALFORMED_JSON", "invalid json", rid)));
         });
 
+        // code bugs, not bc api input
+        exception(Exception.class, (e, req, res) -> {
+            String rid = req.attribute("rid");
+            API.error("rid={} {} {} -> 500 INTERNAL_ERROR", rid, req.requestMethod(), req.pathInfo(), e);
+            res.type("application/json");
+            res.status(500);
+            res.body(gson.toJson(new ErrorResponse("INTERNAL_ERROR", "ssshhhh, u didnt see this", rid)));
+        });
+
         get("/api/initialize_user", "application/json", (req, res) -> {
             return gson.toJson(Manager.createUser());
         });
 
-        post("/api/create_game", "application/json", (req, res) -> {
-            res.type("application/json");
-            String body = req.body();
-            String gid = Manager.createGame(body);
-            record gam(String gid) {
+        post("/api/create_game", "application/json", new Route() {
+            @Override
+            public Object handle(Request req, Response res) throws Exception {
+                String body = req.body();
+                CreateGameRequest crg = gson.fromJson(body, CreateGameRequest.class);
+                
+                return gson.toJson(Manager.createGame(crg));
             }
-            return gson.toJson(new gam(gid), gam.class);
         });
 
         post("/api/join_game", "application/json", (req, res) -> {
-            res.type("application/json");
-            return Manager.joinGame(req.body());
+            String body = req.body();
+            JoinGameRequest jgr = gson.fromJson(body, JoinGameRequest.class);
+            return gson.toJson(Manager.joinGame(jgr));
         });
 
         get("/api/game_info", "application/json", (req, res) -> {
             res.type("application/json");
             String gid = req.queryParamOrDefault("gid", null);
-            if (gid == null) {
-                throw new BadRequest("MISSING_QUERY_PARAM", "missing query parameter gid");
-            }
-            if (gid.length() != 4) {
-                throw new BadRequest("INVALID_GID", "gid does not match schema");
-            }
-            return Manager.fetchGameInfo(gid);
+            GameInfoRequest gir = new GameInfoRequest(gid);
+            return Manager.fetchGameInfo(gir);
         });
 
         post("/api/select_question", "application/json", (req, res) -> {
-            return Manager.selectQuestion(req.body());
+            String body = req.body();
+            SelectQuestionRequest sqr = gson.fromJson(body, SelectQuestionRequest.class);
+            return gson.toJson(Manager.selectQuestion(sqr));
+        });
+
+        post("/api/answer_question", "application/json", (req,res) -> {
+            String body = req.body();
+            API.info("body: {}", body);
+            AnswerQuestionRequest aqr = gson.fromJson(body, AnswerQuestionRequest.class);
+            return gson.toJson(Manager.answerQuestion(aqr));
         });
 
     }

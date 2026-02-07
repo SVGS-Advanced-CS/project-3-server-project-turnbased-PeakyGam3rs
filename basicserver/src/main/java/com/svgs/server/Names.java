@@ -10,40 +10,46 @@ import java.sql.Statement;
 import java.util.HashSet;
 
 public class Names {
-    private static final Connection conn = Helper.createConnection("names.db");
 
     public static void loadNames() {
-        HashSet<String> names = new HashSet<>();
-        try (BufferedReader br = new BufferedReader(new FileReader("./src/main/resources/list.txt"))) {
-            br.lines().filter(s -> s.length() >= 3).forEach(names::add);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
-        String update = "INSERT INTO names (name) VALUES (?)";
-        try (PreparedStatement ps = conn.prepareStatement(update)) {
-            conn.setAutoCommit(false);
-            for (String name : names) {
-                ps.setString(1, name);
-                ps.executeUpdate();
+        try (Connection conn = Helper.createConnection("names.db")) {
+            HashSet<String> names = new HashSet<>();
+            try (BufferedReader br = new BufferedReader(new FileReader("./src/main/resources/list.txt"))) {
+                br.lines().filter(s -> s.length() >= 3).forEach(names::add);
+            } catch (Exception e) {
+                System.out.println(e);
             }
 
-            conn.commit();
-        } catch (SQLException e) {
+            String update = "INSERT INTO names (name) VALUES (?)";
+            try (PreparedStatement ps = conn.prepareStatement(update)) {
+                conn.setAutoCommit(false);
+                for (String name : names) {
+                    ps.setString(1, name);
+                    ps.executeUpdate();
+                }
+
+                conn.commit();
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
 
-    public static String getRandomName() {
-        String query = "SELECT * FROM names ORDER BY RANDOM() LIMIT 1";
-        try (Statement state = conn.createStatement()) {
-            ResultSet rs = state.executeQuery(query);
-            if (rs.next()) {
-                return rs.getString("name");
+    public static String getRandomName() throws Exception {
+        String query = "SELECT name FROM names WHERE id = 1 + (ABS(RANDOM()) % (SELECT MAX(id) from names))";
+        // retry for super rare missing gaps
+        for (int retry = 0; retry < 3; retry++) {
+            try (Connection conn = Helper.createConnection("names.db");
+                    Statement state = conn.createStatement();
+                    ResultSet rs = state.executeQuery(query)) {
+                if (rs.next()) {
+                    return rs.getString("name");
+                }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return "Anthony Tyler";
+        // if this exception is thrown, either buy a lottery ticket or fix the broken db
+        throw new RuntimeException("failed to get random name");
     }
 }

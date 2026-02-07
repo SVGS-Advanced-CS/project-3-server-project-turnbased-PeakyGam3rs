@@ -19,15 +19,14 @@ public class GameInfo {
     int active_question_index;
     // waiting means no player two
     String active_player; // active player name, or blank if none
-    GameCategory[] categorys;
+    GameCategory[] categories;
+    transient long startTime;
     
     transient User p1;
     transient User p2;
     transient HashMap<Integer, Question> questionMap;
     
     ArrayList<Event> event_log;
-
-    transient long startTime;
 
     // select certain levels of data to return
     public GameInfo report() throws Exception {
@@ -46,7 +45,7 @@ public class GameInfo {
         result.active_player = this.active_player;
         result.player_2_name = this.player_2_name;
         result.current_stage = this.current_stage;
-        result.categorys = this.categorys;
+        result.categories = this.categories;
         result.active_question_index = -1;
         if (current_stage.equals("select")) {
             return result;
@@ -56,8 +55,8 @@ public class GameInfo {
         return result;
     }
 
-    GameQuestion fetchGameQuestion(int question_index) throws Exception {
-        for (GameCategory c : categorys) {
+    GameQuestion fetchGameQuestion(int question_index) {
+        for (GameCategory c : categories) {
             for (GameQuestion q : c.questions) {
                 if (q.question_index == question_index) {
                     return q;
@@ -67,11 +66,11 @@ public class GameInfo {
         return null;
     }
 
-    Question getQuestion(int question_index) throws Exception {
+    Question getQuestion(int question_index) {
         return questionMap.get(question_index);
     }
 
-    void selectQuestion(int question_index) throws Exception {
+    void selectQuestion(int question_index) {
         this.current_stage = "answer";
         this.active_question_index = question_index;
         logSelectionEvent(question_index);
@@ -83,14 +82,14 @@ public class GameInfo {
     // this class only holds data about the game state
 
     private transient Match game;
-    GameInfo(Match owner, HashMap<Integer, Question> questionMap, GameCategory[] cats, User p1, String gid) {
-        startTime = System.currentTimeMillis();
+    GameInfo(Match owner, HashMap<Integer, Question> questionMap, GameCategory[] cats, User p1, String gid, long startTime) {
         this.questionMap = questionMap;
         game = owner;
         event_log = new ArrayList<>();
-        categorys = cats;
+        categories = cats;
         this.p1 = p1;
         this.gid = gid;
+        this.startTime = startTime;
     }
 
     User translateName(String playerName) throws Exception {
@@ -110,11 +109,15 @@ public class GameInfo {
     // data must be formatted properly, using json for simplicity
     // generic events are ignored for game logic, just included for users
     void logGenericEvent(String message) throws Exception {
-        event_log.add(new Event(this, message));
+        event_log.add(new Event(timeStamp(), message));
     }
-    void logSelectionEvent(int question_index) throws Exception {
+    void logSelectionEvent(int question_index) {
         String pName = this.active_player;
-        event_log.add(new SelectionEvent(this, pName, question_index));
+        event_log.add(new SelectionEvent(timeStamp(), pName, question_index, questionMap.get(question_index).getQuestion()));
+    }
+
+    public String timeStamp() {
+        return formatTime(System.currentTimeMillis()-startTime);
     }
 
     public String formatTime(long input) {
