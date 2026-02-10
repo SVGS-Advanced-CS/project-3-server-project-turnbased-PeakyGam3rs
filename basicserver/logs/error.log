@@ -276,3 +276,18 @@ org.sqlite.SQLiteException: [SQLITE_ERROR] SQL error or missing database (no suc
 }
 2026-02-07 14:29:48.258 INFO  [qtp746213476-49] api - rid=621971bc-ad0d-4c29-9112-d8a8a6305941 POST /api/answer_question -> 400 INVALID_INPUT
 2026-02-07 14:29:48.296 INFO  [qtp746213476-51] api - rid=b975dc5a-b67b-4b2a-912d-01bea2924599 GET /api/game_info -> 400 INVALID_INPUT
+2026-02-07 14:34:04.039 INFO  [main] api - INFO works
+2026-02-07 14:34:04.040 WARN  [main] api - WARN works
+2026-02-07 14:34:04.040 ERROR [main] api - ERROR works
+2026-02-07 14:34:36.438 INFO  [qtp746213476-50] api - body: {
+	"uid" : "G705SRTH",
+	"gid" : "61RI",
+	"question_index":12,
+	"answer_text": "what is hello world"
+}
+2026-02-07 14:35:21.966 INFO  [qtp746213476-52] api - body: {
+	"uid" : "S7F5JXUH",
+	"gid" : "GXRG",
+	"question_index":9,
+	"answer_text": "what is hello world"
+}
