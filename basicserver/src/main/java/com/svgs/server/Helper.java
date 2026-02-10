@@ -24,7 +24,7 @@ public class Helper {
     private static final Gson gson = new Gson();
     private static final HashMap<Integer, String> cats = loadCats();
     private static int[] catIds;
-
+    private static final HashMap<Integer, Integer> roundIdToCatIds = new HashMap<>();
     private static HashMap<Integer, String> loadCats() {
         String query = "SELECT c.* FROM categories c "
                 + "JOIN questions q ON q.category_id = c.category_id "

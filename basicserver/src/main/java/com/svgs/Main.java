@@ -37,6 +37,7 @@ public class Main {
         API.warn("WARN works");
         API.error("ERROR works");
         port(4567);
+        disableCORS();
         before((req, res) -> res.type("application/json"));
 
         record ErrorResponse(String code, String message, String requestId) {
