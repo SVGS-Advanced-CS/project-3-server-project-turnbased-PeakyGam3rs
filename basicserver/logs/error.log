@@ -10,3 +10,21 @@
 	"question_index":11,
 	"answer_text": "what is hello world"
 }
+2026-02-09 10:12:03.539 INFO  [main] api - INFO works
+2026-02-09 10:12:03.541 WARN  [main] api - WARN works
+2026-02-09 10:12:03.541 ERROR [main] api - ERROR works
+2026-02-09 10:12:45.334 INFO  [qtp2140800683-54] api - body: {
+	"uid" : "QHJ0EO4P",
+	"gid" : "UQO1",
+	"question_index":0,
+	"answer_text": "what is hello world"
+}
+2026-02-09 10:23:35.567 INFO  [qtp2140800683-57] api - rid=587ad8b2-0c27-42b8-bca1-b0fdff6f1482 POST /api/join_game -> 400 INVALID_INPUT
+2026-02-09 10:23:43.509 INFO  [qtp2140800683-47] api - rid=1e26c734-fc84-4af1-a17f-36e4534b1f19 POST /api/join_game -> 400 INVALID_INPUT
+2026-02-09 10:23:48.750 INFO  [qtp2140800683-57] api - rid=6d61605a-f7a2-4807-a44d-073292b4fc01 POST /api/join_game -> 400 INVALID_INPUT
+2026-02-09 10:23:59.166 INFO  [qtp2140800683-58] api - rid=2f86a720-6c30-4c46-93a0-9b602fa51ab2 POST /api/join_game -> 400 INVALID_INPUT
+2026-02-09 10:38:41.409 INFO  [qtp2140800683-46] api - rid=af5376d4-ad57-4bbf-adb7-b818aca48380 POST /api/join_game -> 400 INVALID_INPUT
+2026-02-09 10:38:41.899 INFO  [qtp2140800683-42] api - rid=aa12631a-9bc0-4ba9-a135-927983add0f9 POST /api/create_game -> 400 INVALID_INPUT
+2026-02-09 10:39:18.342 INFO  [qtp2140800683-65] api - rid=68428d68-048e-47de-8011-ee2a8417d077 POST /api/join_game -> 400 INVALID_INPUT
+2026-02-09 10:39:37.150 INFO  [qtp2140800683-40] api - rid=0ab66de7-5a6b-4c5b-99a3-32cc7a2811bd POST /api/join_game -> 400 INVALID_INPUT
+2026-02-09 10:39:52.199 INFO  [qtp2140800683-66] api - rid=8defbea5-0cab-4ca5-a0fe-16f36a08fd3d POST /api/join_game -> 409 USER_IN_GAME

@@ -40,8 +40,7 @@ public class Main {
         disableCORS();
         before((req, res) -> res.type("application/json"));
 
-        record ErrorResponse(String code, String message, String requestId) {
-        }
+        record ErrorResponse(String code, String message, String requestId) {}
 
         before((req, res) -> req.attribute("t0", System.nanoTime()));
 
