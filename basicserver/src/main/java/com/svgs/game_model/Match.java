@@ -84,7 +84,7 @@ public class Match {
     }
 
     public boolean isCorrect(int question_index, String inputRaw) {
-        String answerRaw = info.questionMap.get(question_index).getQuestion();
+        String answerRaw = info.questionMap.get(question_index).getAnswer();
         String a1 = normalizeAnswer(inputRaw);
         String a2 = normalizeAnswer(answerRaw);
 
